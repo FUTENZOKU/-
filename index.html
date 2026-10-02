@@ -40,6 +40,19 @@
                 8px 8px 0px 0px rgba(26, 24, 21, 1);
             position: relative;
         }
+
+        /* ③ 看板の上左右にビス（ネジ留め）をつける */
+        .enamel-sign::before, .enamel-sign::after {
+            content: "•";
+            position: absolute;
+            top: 4px;
+            font-size: 18px;
+            color: #333333;
+            text-shadow: 0px 1px 0px #ffffff;
+            line-height: 1;
+        }
+        .enamel-sign::before { left: 10px; }
+        .enamel-sign::after { right: 10px; }
     </style>
 </head>
 
@@ -240,27 +253,31 @@
             const firstDay = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
 
-            // 月初めの空セル
+            // 月初めの空セル（高さ調整：h-12 sm:h-24）
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-12 sm:h-20 bg-[#f4efe6]/40 border border-[#1a1815]/20';
+                emptyCell.className = 'h-12 sm:h-24 bg-[#f4efe6]/40 border border-[#1a1815]/20';
                 calendarDaysEl.appendChild(emptyCell);
             }
 
-            // 当月の日付セル
+            // 当月の日付セル（高さ調整：h-12 sm:h-24）
             for (let day = 1; day <= totalDays; day++) {
                 const dateKey = formatDateKey(year, month, day);
                 const eventData = liveEvents[dateKey];
 
                 const dayCell = document.createElement('div');
-                dayCell.className = 'h-16 sm:h-24 border-2 border-[#1a1815] bg-[#fdfaf5] p-1 flex flex-col justify-between cursor-pointer hover:bg-[#9e2a2b] hover:text-[#fdfaf5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(26,24,21,1)]';
+                dayCell.className = 'h-12 sm:h-24 border-2 border-[#1a1815] bg-[#fdfaf5] p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#9e2a2b] hover:text-[#fdfaf5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(26,24,21,1)]';
 
-                let innerHTML = `<span class="font-black text-sm sm:text-base text-[#1a1815] group-hover:text-[#fdfaf5]">${day}</span>`;
+                let innerHTML = `<span class="font-black text-xs sm:text-base text-[#1a1815] group-hover:text-[#fdfaf5] leading-none">${day}</span>`;
 
                 if (eventData) {
+                    // スマホ用に「東京・渋谷」から「東京」だけ抽出
+                    const shortLocation = eventData.location.includes('・') ? eventData.location.split('・')[0] : eventData.location;
+
                     innerHTML += `
-                        <div class="bg-[#9e2a2b] group-hover:bg-[#fdfaf5] text-[#fdfaf5] group-hover:text-[#9e2a2b] border border-[#1a1815] text-[10px] sm:text-xs font-bold px-1 py-0.5 truncate text-center">
-                            ${eventData.location}
+                        <div class="bg-[#9e2a2b] group-hover:bg-[#fdfaf5] text-[#fdfaf5] group-hover:text-[#9e2a2b] border border-[#1a1815] text-[8px] sm:text-xs font-bold px-0.5 py-0.2 sm:px-1 sm:py-0.5 text-center leading-tight">
+                            <span class="block sm:hidden">${shortLocation}</span>
+                            <span class="hidden sm:block">${eventData.location}</span>
                         </div>
                     `;
                 }
@@ -289,14 +306,13 @@
                 if (modalPrice) modalPrice.textContent = eventData.price;
                 if (modalDescription) modalDescription.textContent = eventData.description || '';
 
-                // ★ ここでチケットURLをボタンにセット＆別タブで開く設定を追加！
                 if (ticketBtn) {
                     if (eventData.ticketUrl) {
                         ticketBtn.href = eventData.ticketUrl;
-                        ticketBtn.target = '_blank'; // 別タブで開く
+                        ticketBtn.target = '_blank';
                         ticketBtn.style.display = 'inline-block';
                     } else {
-                        ticketBtn.style.display = 'none'; // URLが無い時はボタンを隠す
+                        ticketBtn.style.display = 'none';
                     }
                 }
             } else {
