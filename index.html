@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公演日程表 - SHOWA LIVE SCHEDULE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Shippori Mincho -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Shippori Mincho', serif;
+        }
+
+        /* ① 全体に重なるザラザラしたノイズ質感 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ② ホーロー看板風のフチ・二重枠 */
+        .enamel-sign {
+            background-color: #f4efe6;
+            border: 4px solid #1a1815;
+            box-shadow:
+                inset 0 0 0 3px #f4efe6,
+                inset 0 0 0 7px #1c2d42,
+                8px 8px 0px 0px rgba(26, 24, 21, 1);
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f4efe6] text-[#1a1815] min-h-screen flex flex-col justify-between">
+
+    <!-- ヘッダー -->
+    <header class="p-6 text-center border-b border-[#1a1815]">
+        <h1 class="text-3xl sm:text-4xl font-black text-center text-[#1a1815] tracking-widest my-4">
+            公 演 日 程
+        </h1>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <!-- カレンダー本体コンテナ -->
+        <div class="enamel-sign w-full max-w-4xl mx-auto p-4 sm:p-8">
+
+            <!-- ヘッダー（月切り替え） -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-[#1a1815]">
+                <button id="prev-month"
+                    class="p-2 border-2 border-[#1a1815] bg-[#f4efe6] hover:bg-[#9e2a2b] hover:text-[#fdfaf5] text-[#1a1815] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(26,24,21,1)] active:translate-x-0.5 active:translate-y-0.5">
+                    ＜ 前月
+                </button>
+                <h2 id="currentMonthYear" class="text-xl sm:text-2xl font-black text-[#1a1815] tracking-widest"></h2>
+                <button id="next-month"
+                    class="p-2 border-2 border-[#1a1815] bg-[#f4efe6] hover:bg-[#9e2a2b] hover:text-[#fdfaf5] text-[#1a1815] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(26,24,21,1)] active:translate-x-0.5 active:translate-y-0.5">
+                    次月 ＞
+                </button>
+            </div>
+
+            <!-- 曜日ヘッダー -->
+            <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center font-bold border-b-2 border-[#1a1815] pb-2">
+                <div class="text-[#9e2a2b]">日</div>
+                <div class="text-[#1a1815]">月</div>
+                <div class="text-[#1a1815]">火</div>
+                <div class="text-[#1a1815]">水</div>
+                <div class="text-[#1a1815]">木</div>
+                <div class="text-[#1a1815]">金</div>
+                <div class="text-[#1a1815]">土</div>
+            </div>
+
+            <!-- カレンダーの日付グリッド -->
+            <div id="calendar-days" class="grid grid-cols-7 gap-1 sm:gap-2">
+                <!-- JavaScriptで動的に描画されます -->
+            </div>
+
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="py-4 text-center text-xs text-[#1a1815]/70 border-t border-[#1a1815]/30">
+        &copy; LIVE SCHEDULE. All rights reserved.
+    </footer>
+
+    <!-- イベント詳細モーダル -->
+    <div id="event-modal"
+        class="fixed inset-0 bg-[#1a1815]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div id="modal-card"
+            class="bg-[#fdfaf5] border-4 border-[#1a1815] w-full max-w-lg overflow-hidden shadow-[12px_12px_0px_0px_rgba(26,24,21,1)] relative p-6">
+
+            <button id="close-modal"
+                class="absolute top-4 right-4 z-10 border-2 border-[#1a1815] bg-[#f4efe6] hover:bg-[#9e2a2b] hover:text-[#fdfaf5] text-[#1a1815] font-black px-2 py-1">
+                ✕
+            </button>
+
+            <div
+                class="inline-block bg-[#9e2a2b] text-[#fdfaf5] text-xs font-bold px-2 py-1 mb-3 border border-[#1a1815]">
+                <span id="modalDateBadge"></span>
+            </div>
+
+            <h3 id="modalTitle" class="text-2xl font-black text-[#1a1815] mb-4 border-b-2 border-[#1a1815] pb-2">
+                公演詳細
+            </h3>
+
+            <div class="space-y-2 mb-6 text-sm font-bold">
+                <p><strong>会場：</strong> <span id="modalVenue"></span></p>
+                <p><strong>時間：</strong> <span id="modalTime"></span></p>
+                <p><strong>料金：</strong> <span id="modalPrice"></span></p>
+                <p id="modalDescription" class="font-normal mt-4 text-[#1a1815]/80 leading-relaxed"></p>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t-2 border-[#1a1815]">
+                <a id="modalTicketBtn" href="#"
+                    class="bg-[#9e2a2b] text-[#fdfaf5] hover:bg-[#1a1815] font-black px-4 py-2 border-2 border-[#1a1815] shadow-[2px_2px_0px_0px_rgba(26,24,21,1)] transition-colors">
+                    チケット予約
+                </a>
+                <button id="modalCloseBtn"
+                    class="border-2 border-[#1a1815] bg-[#f4efe6] hover:bg-[#1a1815] hover:text-[#fdfaf5] font-bold px-4 py-2">
+                    閉じる
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript 処理 -->
+    <script>
+        // 公演データ
+        const liveEvents = {
+            '2026-10-06': {
+                title: '『渋谷うたの日』',
+                location: '東京・渋谷',
+                venue: 'Spotify O-WEST',
+                time: '18:15 開場 / 19:00 開演',
+                price: '前売 ¥4,500 (+1D)',
+                ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971'
+            },
+            '2026-10-12': {
+                title: 'The Strange Boutique',
+                location: '東京・渋谷',
+                venue: 'CLUB CRAWL',
+                time: '18:30 開場 / 19:00 開演',
+                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                ticketUrl: 'https://tiget.net/events/526970'
+            },
+            '2026-10-18': {
+                title: '2026年フーテン族の音楽会 第三夜',
+                location: '東京・渋谷',
+                venue: 'B.Y.G',
+                time: '18:00 開場 / 19:00 開演',
+                price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
+                ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9'
+            },
+            '2026-10-23': {
+                title: 'TSURUMAI EMPATHY',
+                location: '愛知・名古屋',
+                venue: 'DAYTRIP',
+                time: '18:30 開場 / 19:00 開演',
+                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9'
+
+            },
+            '2026-10-24': {
+                title: 'YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026',
+                location: '群馬・高崎',
+                venue: 'the Groove TAKASAKI',
+                time: '16:30 開場 / 17:00 開演',
+                price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
+                ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9'
+
+            },
+            '2026-10-25': {
+                title: '武蔵野えれじい',
+                location: '東京・吉祥寺',
+                venue: '全4会場',
+                time: '12:00 開場 / 13:00 開演',
+                price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
+                ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5'
+
+            },
+            '2026-10-31': {
+                title: 'Win-Win HalloWeen',
+                location: '長野・岡谷',
+                venue: '岡谷Music Bar UzuUzu',
+                time: '17:30 開場 / 18:00 開演',
+                price: '前売 ¥2,500 (+1D)',
+                ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6'
+
+            },
+
+        };
+
+        // DOM要素の取得
+        const calendarDaysEl = document.getElementById('calendar-days');
+        const currentMonthYearEl = document.getElementById('currentMonthYear');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+
+        const modalEl = document.getElementById('event-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalDateBadge = document.getElementById('modalDateBadge');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalVenue = document.getElementById('modalVenue');
+        const modalTime = document.getElementById('modalTime');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalDescription = document.getElementById('modalDescription');
+
+        let now = new Date();
+        let displayYear = now.getFullYear();
+        let displayMonth = now.getMonth();
+
+        function formatDateKey(year, month, day) {
+            const m = String(month + 1).padStart(2, '0');
+            const d = String(day).padStart(2, '0');
+            return `${year}-${m}-${d}`;
+        }
+
+        // カレンダー描画関数
+        function renderCalendar(year, month) {
+            if (!calendarDaysEl) return;
+            calendarDaysEl.innerHTML = '';
+
+            if (currentMonthYearEl) {
+                currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
+            }
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            // 月初めの空セル
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'h-16 sm:h-24 bg-[#f4efe6]/40 border border-[#1a1815]/20';
+                calendarDaysEl.appendChild(emptyCell);
+            }
+
+            // 当月の日付セル
+            for (let day = 1; day <= totalDays; day++) {
+                const dateKey = formatDateKey(year, month, day);
+                const eventData = liveEvents[dateKey];
+
+                const dayCell = document.createElement('div');
+                dayCell.className = 'h-16 sm:h-24 border-2 border-[#1a1815] bg-[#fdfaf5] p-1 flex flex-col justify-between cursor-pointer hover:bg-[#9e2a2b] hover:text-[#fdfaf5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(26,24,21,1)]';
+
+                let innerHTML = `<span class="font-black text-sm sm:text-base text-[#1a1815] group-hover:text-[#fdfaf5]">${day}</span>`;
+
+                if (eventData) {
+                    innerHTML += `
+                        <div class="bg-[#9e2a2b] group-hover:bg-[#fdfaf5] text-[#fdfaf5] group-hover:text-[#9e2a2b] border border-[#1a1815] text-[10px] sm:text-xs font-bold px-1 py-0.5 truncate text-center">
+                            ${eventData.location}
+                        </div>
+                    `;
+                }
+
+                dayCell.innerHTML = innerHTML;
+
+                dayCell.addEventListener('click', () => {
+                    openModal(year, month, day, eventData);
+                });
+
+                calendarDaysEl.appendChild(dayCell);
+            }
+        }
+
+        // モーダル表示
+        function openModal(year, month, day, eventData) {
+            const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
+            if (modalDateBadge) modalDateBadge.textContent = dateStr;
+
+            const ticketBtn = document.getElementById('modalTicketBtn');
+
+            if (eventData) {
+                if (modalTitle) modalTitle.textContent = eventData.title;
+                if (modalVenue) modalVenue.textContent = eventData.venue;
+                if (modalTime) modalTime.textContent = eventData.time;
+                if (modalPrice) modalPrice.textContent = eventData.price;
+                if (modalDescription) modalDescription.textContent = eventData.description || '';
+
+                // ★ ここでチケットURLをボタンにセット＆別タブで開く設定を追加！
+                if (ticketBtn) {
+                    if (eventData.ticketUrl) {
+                        ticketBtn.href = eventData.ticketUrl;
+                        ticketBtn.target = '_blank'; // 別タブで開く
+                        ticketBtn.style.display = 'inline-block';
+                    } else {
+                        ticketBtn.style.display = 'none'; // URLが無い時はボタンを隠す
+                    }
+                }
+            } else {
+                if (modalTitle) modalTitle.textContent = '公演情報はありません';
+                if (modalVenue) modalVenue.textContent = '-';
+                if (modalTime) modalTime.textContent = '-';
+                if (modalPrice) modalPrice.textContent = '-';
+                if (modalDescription) modalDescription.textContent = '本日の予定公演はございません。';
+                if (ticketBtn) ticketBtn.style.display = 'none';
+            }
+
+            if (modalEl) modalEl.classList.remove('hidden');
+        }
+
+        // モーダル非表示
+        function closeModal() {
+            if (modalEl) modalEl.classList.add('hidden');
+        }
+
+        // 月切り替えイベント
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                displayMonth--;
+                if (displayMonth < 0) {
+                    displayMonth = 11;
+                    displayYear--;
+                }
+                renderCalendar(displayYear, displayMonth);
+            });
+        }
+
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', () => {
+                displayMonth++;
+                if (displayMonth > 11) {
+                    displayMonth = 0;
+                    displayYear++;
+                }
+                renderCalendar(displayYear, displayMonth);
+            });
+        }
+
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+
+        if (modalEl) {
+            modalEl.addEventListener('click', (e) => {
+                if (e.target === modalEl) closeModal();
+            });
+        }
+
+        // 初期表示
+        renderCalendar(displayYear, displayMonth);
+    </script>
+</body>
+
+</html>
