@@ -46,8 +46,9 @@
 <body class="bg-[#b3a893] text-[#12100e] min-h-screen flex flex-col justify-between">
 
     <!-- ヘッダー -->
-    <header class="p-6 text-center border-b border-[#12100e]">
-        <h1 class="text-3xl sm:text-4xl font-black text-center text-[#12100e] tracking-widest my-4">
+    <header class="p-4 sm:p-6 text-center border-b border-[#12100e]">
+        <h1
+            class="text-xl sm:text-3xl md:text-4xl font-black text-center text-[#12100e] tracking-wider sm:tracking-widest my-2 sm:my-4 whitespace-nowrap">
             フ ー テ ン 族 公 演 日 程
         </h1>
     </header>
@@ -363,11 +364,13 @@
 
                     innerHTML += `<div class="flex flex-col gap-0.5 sm:gap-1 w-full">`;
 
-                    // ライブ情報がある場合（赤バッジ）
+                    // ライブ情報がある場合（赤バッジ：都道府県の頭2文字だけ表示）
                     if (liveData) {
+                        // 「東京・渋谷」などの先頭2文字（都道府県）だけを取得
+                        const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
                         innerHTML += `
-                        <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[9px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
-                            ${liveData.location}
+                        <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[9px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
+                            ${pref}
                         </div>
                     `;
                     }
@@ -392,91 +395,91 @@
                 }
             }
 
-// モーダル表示
-        function openModal(year, month, day, liveData, hasRadio) {
-            const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
-            if (modalDateBadge) modalDateBadge.textContent = dateStr;
+            // モーダル表示
+            function openModal(year, month, day, liveData, hasRadio) {
+                const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
+                if (modalDateBadge) modalDateBadge.textContent = dateStr;
 
-            let htmlContent = '';
+                let htmlContent = '';
 
-            // ボタン表示の初期化（一旦非表示）
-            if (modalTicketBtn) modalTicketBtn.style.display = 'none';
-            if (modalRadioBtn) modalRadioBtn.classList.add('hidden');
+                // ボタン表示の初期化（一旦非表示）
+                if (modalTicketBtn) modalTicketBtn.style.display = 'none';
+                if (modalRadioBtn) modalRadioBtn.classList.add('hidden');
 
-            // フライヤーコンテナの初期化
-            if (modalFlyerContainer) {
-                modalFlyerContainer.innerHTML = '';
-                modalFlyerContainer.classList.add('hidden');
-                modalFlyerContainer.classList.remove('flex');
-            }
+                // フライヤーコンテナの初期化
+                if (modalFlyerContainer) {
+                    modalFlyerContainer.innerHTML = '';
+                    modalFlyerContainer.classList.add('hidden');
+                    modalFlyerContainer.classList.remove('flex');
+                }
 
-            if (liveData) {
-                if (modalTitle) modalTitle.textContent = liveData.title;
-                htmlContent += `
+                if (liveData) {
+                    if (modalTitle) modalTitle.textContent = liveData.title;
+                    htmlContent += `
                     <p><strong>会場：</strong> ${liveData.venue}</p>
                     <p><strong>時間：</strong> ${liveData.time}</p>
                     <p><strong>料金：</strong> ${liveData.price}</p>
                 `;
 
-                // フライヤー画像の描画処理（1枚でも配列で複数枚でも対応）
-                if (liveData.flyerUrl && modalFlyerContainer) {
-                    const flyers = Array.isArray(liveData.flyerUrl) ? liveData.flyerUrl : [liveData.flyerUrl];
-                    const validFlyers = flyers.filter(url => url && url.trim() !== '');
+                    // フライヤー画像の描画処理（1枚でも配列で複数枚でも対応）
+                    if (liveData.flyerUrl && modalFlyerContainer) {
+                        const flyers = Array.isArray(liveData.flyerUrl) ? liveData.flyerUrl : [liveData.flyerUrl];
+                        const validFlyers = flyers.filter(url => url && url.trim() !== '');
 
-                    if (validFlyers.length > 0) {
-                        validFlyers.forEach(url => {
-                            const img = document.createElement('img');
-                            img.src = url;
-                            img.alt = '公演フライヤー';
-                            img.className = 'w-full max-h-80 object-contain border-2 border-[#12100e] shadow-[4px_4px_0px_0px_rgba(18,16,14,1)] bg-[#12100e]/5';
-                            modalFlyerContainer.appendChild(img);
-                        });
-                        modalFlyerContainer.classList.remove('hidden');
-                        modalFlyerContainer.classList.add('flex');
+                        if (validFlyers.length > 0) {
+                            validFlyers.forEach(url => {
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.alt = '公演フライヤー';
+                                img.className = 'w-full max-h-80 object-contain border-2 border-[#12100e] shadow-[4px_4px_0px_0px_rgba(18,16,14,1)] bg-[#12100e]/5';
+                                modalFlyerContainer.appendChild(img);
+                            });
+                            modalFlyerContainer.classList.remove('hidden');
+                            modalFlyerContainer.classList.add('flex');
+                        }
                     }
-                }
 
-                // チケット予約ボタンの表示設定
-                if (modalTicketBtn && liveData.ticketUrl) {
-                    modalTicketBtn.href = liveData.ticketUrl;
-                    modalTicketBtn.textContent = 'チケット予約';
-                    modalTicketBtn.style.display = 'inline-block';
-                }
+                    // チケット予約ボタンの表示設定
+                    if (modalTicketBtn && liveData.ticketUrl) {
+                        modalTicketBtn.href = liveData.ticketUrl;
+                        modalTicketBtn.textContent = 'チケット予約';
+                        modalTicketBtn.style.display = 'inline-block';
+                    }
 
-                // ラジオと同日の場合はラジオボタンも表示！
-                if (hasRadio && modalRadioBtn) {
-                    modalRadioBtn.classList.remove('hidden');
-                }
+                    // ラジオと同日の場合はラジオボタンも表示！
+                    if (hasRadio && modalRadioBtn) {
+                        modalRadioBtn.classList.remove('hidden');
+                    }
 
-            } else if (hasRadio) {
-                if (modalTitle) modalTitle.textContent = '78 musi-curate フーテンラジオ';
-                htmlContent += `
+                } else if (hasRadio) {
+                    if (modalTitle) modalTitle.textContent = '78 musi-curate フーテンラジオ';
+                    htmlContent += `
                     <p><strong>放送形態：</strong> BAY FM ラジオ放送</p>
                     <p><strong>放送時間：</strong> 27:00 〜 配信開始</p>
                     <p class="font-normal mt-2 leading-relaxed">毎月第一水曜日の定期ラジオ放送日です。</p>
                 `;
-                // ラジオ単体の日はラジオボタンを表示
-                if (modalRadioBtn) {
-                    modalRadioBtn.classList.remove('hidden');
+                    // ラジオ単体の日はラジオボタンを表示
+                    if (modalRadioBtn) {
+                        modalRadioBtn.classList.remove('hidden');
+                    }
+                } else {
+                    if (modalTitle) modalTitle.textContent = '公演情報はありません';
+                    htmlContent = '<p class="font-normal text-[#12100e]/80">本日の予定公演・出演はありません。</p>';
                 }
-            } else {
-                if (modalTitle) modalTitle.textContent = '公演情報はありません';
-                htmlContent = '<p class="font-normal text-[#12100e]/80">本日の予定公演・出演はありません。</p>';
-            }
 
-            // もしライブとラジオが同日の場合
-            if (liveData && hasRadio) {
-                htmlContent += `
+                // もしライブとラジオが同日の場合
+                if (liveData && hasRadio) {
+                    htmlContent += `
                     <div class="mt-4 pt-3 border-t border-[#12100e]/40 text-xs">
                         <p class="text-[#1c2d42] font-bold">【ラジオ放送日】</p>
                         <p class="font-normal">本日第一水曜日は定期ラジオ放送日でもあります。</p>
                     </div>
                 `;
-            }
+                }
 
-            if (modalContent) modalContent.innerHTML = htmlContent;
-            if (modalEl) modalEl.classList.remove('hidden');
-        }
+                if (modalContent) modalContent.innerHTML = htmlContent;
+                if (modalEl) modalEl.classList.remove('hidden');
+            }
 
             // モーダル非表示
             function closeModal() {
