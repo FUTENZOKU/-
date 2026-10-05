@@ -107,7 +107,7 @@
                 公演詳細
             </h3>
 
-            <!-- フライヤー画像表示エリア（1枚でも複数枚でも縦に綺麗に並びます） -->
+            <!-- フライヤー画像表示エリア -->
             <div id="modalFlyerContainer" class="mb-4 hidden flex-col gap-3 text-center">
                 <!-- JavaScriptで動的に画像タグが生成されます -->
             </div>
@@ -133,357 +133,430 @@
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- JavaScript 処理 -->
-        <script>
-            // 公演データ（flyerUrl は '画像名.jpg' または ['画像1.jpg', '画像2.jpg'] のどちらでもOKです）
-            const liveEvents = {
-                '2026-10-06': {
-                    type: 'live',
-                    title: '『渋谷うたの日』',
-                    location: '東京・渋谷',
-                    venue: 'Spotify O-WEST',
-                    time: '18:15 開場 / 19:00 開演',
-                    price: '前売 ¥4,500 (+1D)',
-                    ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971',
-                    flyerUrl: '1006.jpeg'
-                },
-                '2026-10-12': {
-                    type: 'live',
-                    title: 'The Strange Boutique',
-                    location: '東京・渋谷',
-                    venue: 'CLUB CRAWL',
-                    time: '18:30 開場 / 19:00 開演',
-                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                    ticketUrl: 'https://tiget.net/events/526970',
-                    flyerUrl: '1012.jpg'
-                },
-                '2026-10-18': {
-                    type: 'live',
-                    title: '2026年フーテン族の音楽会 第三夜',
-                    location: '東京・渋谷',
-                    venue: 'B.Y.G',
-                    time: '18:00 開場 / 19:00 開演',
-                    price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
-                    ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9',
-                    flyerUrl: '1018.jpg'
-                },
-                '2026-10-23': {
-                    type: 'live',
-                    title: 'TSURUMAI EMPATHY',
-                    location: '愛知・名古屋',
-                    venue: 'DAYTRIP',
-                    time: '18:30 開場 / 19:00 開演',
-                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                    ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
-                    flyerUrl: '1023.jpeg'
-                },
-                '2026-10-24': {
-                    type: 'live',
-                    title: 'YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026',
-                    location: '群馬・高崎',
-                    venue: 'the Groove TAKASAKI',
-                    time: '16:30 開場 / 17:00 開演',
-                    price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
-                    ticketUrl: 'https://forms.gle/5F1DyXFSNwDiEGfi7',
-                    flyerUrl: '1024NEW.jpg'
-                },
-                '2026-10-25': {
-                    type: 'live',
-                    title: '武蔵野えれじい',
-                    location: '東京・吉祥寺',
-                    venue: '全4会場',
-                    time: '12:00 開場 / 13:00 開演',
-                    price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
-                    ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5',
-                    flyerUrl: ['1025A.jpeg', '1025B.jpeg']
-                },
-                '2026-10-31': {
-                    type: 'live',
-                    title: 'Win-Win HalloWeen',
-                    location: '長野・岡谷',
-                    venue: '岡谷Music Bar UzuUzu',
-                    time: '17:30 開場 / 18:00 開演',
-                    price: '前売 ¥2,500 (+1D)',
-                    ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6',
-                    flyerUrl: '10.31.jpg'
-                },
-                '2026-11-03': {
-                    type: 'live',
-                    title: '琴線に触れる vol.32',
-                    location: '兵庫・神戸',
-                    venue: '神戸 Varit.',
-                    time: '17:00 開場 / 17:30 開演',
-                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                    ticketUrl: 'https://forms.gle/3b6MFMMnKiw3XxvP7',
-                    flyerUrl: '1103.jpg'
-                },
-                '2026-11-04': {
-                    type: 'live',
-                    title: 'フーテン族 ワンマンコンサート',
-                    location: '京都・上京区',
-                    venue: 'COFFEE HOUSE 拾得',
-                    time: '17:30 開場 / 19:00 開演',
-                    price: '前売 ¥3,500 / 当日 ¥4,500 / 学割 ¥2,000 (+1D)',
-                    ticketUrl: 'https://forms.gle/xLAxunRbmncVHZaa6',
-                    flyerUrl: '1104.jpg'
-                },
-                '2026-11-24': {
-                    type: 'live',
-                    title: '止まらない何か Vol.20',
-                    location: '東京・新宿',
-                    venue: '新宿 red cloth',
-                    time: '18:15 開場 / 18:45 開演',
-                    price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
-                    ticketUrl: 'https://forms.gle/R995MkDhizung5Zk8',
-                    flyerUrl: '1124.jpeg'
-                },
-                '2026-11-29': {
-                    type: 'live',
-                    title: 'ツーマン',
-                    location: '東京',
-                    venue: '未定',
-                    time: '未定',
-                    price: '未定',
-                    ticketUrl: '',
-                    flyerUrl: ''
-                },
-                '2026-12-20': {
-                    type: 'live',
-                    title: '未定',
-                    location: '大阪',
-                    venue: '未定',
-                    time: '未定',
-                    price: '未定',
-                    ticketUrl: '',
-                    flyerUrl: ''
-                },
-                '2026-12-21': {
-                    type: 'live',
-                    title: '未定',
-                    location: '愛知',
-                    venue: '未定',
-                    time: '未定',
-                    price: '未定',
-                    ticketUrl: '',
-                    flyerUrl: ''
-                },
-                '2027-01-10': {
-                    type: 'live',
-                    title: 'ロックンロールサーカス2027',
-                    location: '兵庫・神戸',
-                    venue: '未定',
-                    time: '12:00 開場 / 13:00 開演',
-                    price: '二日券 ¥14,700 / U-25 ¥8,200 一日券 ¥7,900 / U-25 ¥4,600',
-                    ticketUrl: 'https://rrckobe.com/#tickets',
-                    flyerUrl: '0110.jpeg'
-                },
-                '2027-01-11': {
-                    type: 'live',
-                    title: 'ロックンロールをはじめよう',
-                    location: '東京・鶯谷',
-                    venue: '新世紀ダンスホール',
-                    time: '16:30 開場 / 17:00 開演',
-                    price: '一般 ¥4,400 / U-22 ¥2,200',
-                    ticketUrl: 'https://t.co/7dvMETTkvl',
-                    flyerUrl: ''
-                }
+    <!-- JavaScript 処理 -->
+    <script>
+        // 公演データ
+        const liveEvents = {
+            '2026-10-06': {
+                type: 'live',
+                title: '『渋谷うたの日』',
+                location: '東京・渋谷',
+                venue: 'Spotify O-WEST',
+                time: '18:15 開場 / 19:00 開演',
+                price: '前売 ¥4,500 (+1D)',
+                ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971',
+                flyerUrl: '1006.jpeg'
+            },
+            '2026-10-12': {
+                type: 'live',
+                title: 'The Strange Boutique',
+                location: '東京・渋谷',
+                venue: 'CLUB CRAWL',
+                time: '18:30 開場 / 19:00 開演',
+                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                ticketUrl: 'https://tiget.net/events/526970',
+                flyerUrl: '1012.jpg'
+            },
+            '2026-10-18': {
+                type: 'live',
+                title: '2026年フーテン族の音楽会 第三夜',
+                location: '東京・渋谷',
+                venue: 'B.Y.G',
+                time: '18:00 開場 / 19:00 開演',
+                price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
+                ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9',
+                flyerUrl: '1018.jpg'
+            },
+            '2026-10-23': {
+                type: 'live',
+                title: 'TSURUMAI EMPATHY',
+                location: '愛知・名古屋',
+                venue: 'DAYTRIP',
+                time: '18:30 開場 / 19:00 開演',
+                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
+                flyerUrl: '1023.jpeg'
+            },
+            '2026-10-24': {
+                type: 'live',
+                title: 'YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026',
+                location: '群馬・高崎',
+                venue: 'the Groove TAKASAKI',
+                time: '16:30 開場 / 17:00 開演',
+                price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
+                ticketUrl: 'https://forms.gle/5F1DyXFSNwDiEGfi7',
+                flyerUrl: '1024NEW.jpg'
+            },
+            '2026-10-25': {
+                type: 'live',
+                title: '武蔵野えれじい',
+                location: '東京・吉祥寺',
+                venue: '全4会場',
+                time: '12:00 開場 / 13:00 開演',
+                price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
+                ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5',
+                flyerUrl: ['1025A.jpeg', '1025B.jpeg']
+            },
+            '2026-10-31': {
+                type: 'live',
+                title: 'Win-Win HalloWeen',
+                location: '長野・岡谷',
+                venue: '岡谷Music Bar UzuUzu',
+                time: '17:30 開場 / 18:00 開演',
+                price: '前売 ¥2,500 (+1D)',
+                ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6',
+                flyerUrl: '10.31.jpg'
+            },
+            '2026-11-03': {
+                type: 'live',
+                title: '琴線に触れる vol.32',
+                location: '兵庫・神戸',
+                venue: '神戸 Varit.',
+                time: '17:00 開場 / 17:30 開演',
+                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                ticketUrl: 'https://forms.gle/3b6MFMMnKiw3XxvP7',
+                flyerUrl: '1103.jpg'
+            },
+            '2026-11-04': {
+                type: 'live',
+                title: 'フーテン族 ワンマンコンサート',
+                location: '京都・上京区',
+                venue: 'COFFEE HOUSE 拾得',
+                time: '17:30 開場 / 19:00 開演',
+                price: '前売 ¥3,500 / 当日 ¥4,500 / 学割 ¥2,000 (+1D)',
+                ticketUrl: 'https://forms.gle/xLAxunRbmncVHZaa6',
+                flyerUrl: '1104.jpg'
+            },
+            '2026-11-24': {
+                type: 'live',
+                title: '止まらない何か Vol.20',
+                location: '東京・新宿',
+                venue: '新宿 red cloth',
+                time: '18:15 開場 / 18:45 開演',
+                price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
+                ticketUrl: 'https://forms.gle/R995MkDhizung5Zk8',
+                flyerUrl: '1124.jpeg'
+            },
+            '2026-11-29': {
+                type: 'live',
+                title: 'ツーマン',
+                location: '東京',
+                venue: '未定',
+                time: '未定',
+                price: '未定',
+                ticketUrl: '',
+                flyerUrl: ''
+            },
+            '2026-12-20': {
+                type: 'live',
+                title: '未定',
+                location: '大阪',
+                venue: '未定',
+                time: '未定',
+                price: '未定',
+                ticketUrl: '',
+                flyerUrl: ''
+            },
+            '2026-12-21': {
+                type: 'live',
+                title: '未定',
+                location: '愛知',
+                venue: '未定',
+                time: '未定',
+                price: '未定',
+                ticketUrl: '',
+                flyerUrl: ''
+            },
+            '2027-01-10': {
+                type: 'live',
+                title: 'ロックンロールサーカス2027',
+                location: '兵庫・神戸',
+                venue: '未定',
+                time: '12:00 開場 / 13:00 開演',
+                price: '二日券 ¥14,700 / U-25 ¥8,200 一日券 ¥7,900 / U-25 ¥4,600',
+                ticketUrl: 'https://rrckobe.com/#tickets',
+                flyerUrl: '0110.jpeg'
+            },
+            '2027-01-11': {
+                type: 'live',
+                title: 'ロックンロールをはじめよう',
+                location: '東京・鶯谷',
+                venue: '新世紀ダンスホール',
+                time: '16:30 開場 / 17:00 開演',
+                price: '一般 ¥4,400 / U-22 ¥2,200',
+                ticketUrl: 'https://t.co/7dvMETTkvl',
+                flyerUrl: ''
+            }
+        };
+
+        // DOM要素の取得
+        const calendarDaysEl = document.getElementById('calendar-days');
+        const currentMonthYearEl = document.getElementById('currentMonthYear');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+
+        const modalEl = document.getElementById('event-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalDateBadge = document.getElementById('modalDateBadge');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalTicketBtn = document.getElementById('modalTicketBtn');
+        const modalRadioBtn = document.getElementById('modalRadioBtn');
+        const modalFlyerContainer = document.getElementById('modalFlyerContainer');
+
+        let now = new Date();
+        let displayYear = now.getFullYear();
+        let displayMonth = now.getMonth();
+
+        function formatDateKey(year, month, day) {
+            const m = String(month + 1).padStart(2, '0');
+            const d = String(day).padStart(2, '0');
+            return `${year}-${m}-${d}`;
+        }
+
+        // 簡易祝日判定データ
+        function getHolidayName(year, month, day) {
+            const m = month + 1;
+            const d = day;
+            const dateStr = `${m}/${d}`;
+
+            const fixedHolidays = {
+                '1/1': '元日',
+                '2/11': '建国記念の日', '2/23': '天皇誕生日',
+                '4/29': '昭和の日', '5/3': '憲法記念日', '5/4': 'みどりの日', '5/5': 'こどもの日',
+                '8/11': '山の日', '11/3': '文化の日', '11/23': '勤労感謝の日', '12/23': '天皇誕生日'
             };
+            if (fixedHolidays[dateStr]) return fixedHolidays[dateStr];
 
-            // DOM要素の取得
-            const calendarDaysEl = document.getElementById('calendar-days');
-            const currentMonthYearEl = document.getElementById('currentMonthYear');
-            const prevMonthBtn = document.getElementById('prev-month');
-            const nextMonthBtn = document.getElementById('next-month');
+            const dayOfWeek = new Date(year, month, day).getDay();
+            const nthMonday = Math.ceil(day / 7);
 
-            const modalEl = document.getElementById('event-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const modalCloseBtn = document.getElementById('modalCloseBtn');
-            const modalDateBadge = document.getElementById('modalDateBadge');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalContent = document.getElementById('modalContent');
-            const modalTicketBtn = document.getElementById('modalTicketBtn');
-            const modalRadioBtn = document.getElementById('modalRadioBtn');
-            const modalFlyerContainer = document.getElementById('modalFlyerContainer');
-
-            let now = new Date();
-            let displayYear = now.getFullYear();
-            let displayMonth = now.getMonth();
-
-            function formatDateKey(year, month, day) {
-                const m = String(month + 1).padStart(2, '0');
-                const d = String(day).padStart(2, '0');
-                return `${year}-${m}-${d}`;
+            if (dayOfWeek === 1) {
+                if (m === 1 && nthMonday === 2) return '成人の日';
+                if (m === 7 && nthMonday === 3) return '海の日';
+                if (m === 9 && nthMonday === 3) return '敬老の日';
+                if (m === 10 && nthMonday === 2) return 'スポーツの日';
             }
-            // 簡易祝日判定データ（主要な祝日・振替休日）
-            function getHolidayName(year, month, day) {
-                const m = month + 1;
-                const d = day;
-                const dateStr = `${m}/${d}`;
 
-                // 固定祝日
-                const fixedHolidays = {
-                    '1/1': '元日',
-                    '2/11': '建国記念の日', '2/23': '天皇誕生日',
-                    '4/29': '昭和の日', '5/3': '憲法記念日', '5/4': 'みどりの日', '5/5': 'こどもの日',
-                    '8/11': '山の日', '11/3': '文化の日', '11/23': '勤労感謝の日', '12/23': '天皇誕生日'
-                };
-                if (fixedHolidays[dateStr]) return fixedHolidays[dateStr];
+            if (m === 3 && d === Math.floor(20.8431 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '春分の日';
+            if (m === 9 && d === Math.floor(23.2488 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '秋分の日';
 
-                // ハッピーマンデー等（第N月曜日など）の判定
-                const dayOfWeek = new Date(year, month, day).getDay();
-                const nthMonday = Math.ceil(day / 7);
+            return null;
+        }
 
-                if (dayOfWeek === 1) { // 月曜日
-                    if (m === 1 && nthMonday === 2) return '成人の日';
-                    if (m === 7 && nthMonday === 3) return '海の日';
-                    if (m === 9 && nthMonday === 3) return '敬老の日';
-                    if (m === 10 && nthMonday === 2) return 'スポーツの日';
+        function isFirstWednesday(year, month, day) {
+            const date = new Date(year, month, day);
+            return date.getDay() === 3 && day <= 7;
+        }
+
+        // モーダル表示関数
+        function openModal(dateKey, liveData, hasRadio) {
+            if (!modalEl) return;
+
+            const parts = dateKey.split('-');
+            const year = parts[0];
+            const month = parseInt(parts[1], 10);
+            const day = parseInt(parts[2], 10);
+
+            if (modalDateBadge) modalDateBadge.textContent = `${year}年${month}月${day}日`;
+
+            if (modalFlyerContainer) {
+                modalFlyerContainer.innerHTML = '';
+                let flyerList = [];
+                if (liveData && liveData.flyerUrl) {
+                    if (Array.isArray(liveData.flyerUrl)) {
+                        flyerList = liveData.flyerUrl;
+                    } else if (typeof liveData.flyerUrl === 'string' && liveData.flyerUrl.trim() !== '') {
+                        flyerList = [liveData.flyerUrl];
+                    }
                 }
 
-                // 春分の日・秋分の日（概算）
-                if (m === 3 && d === Math.floor(20.8431 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '春分の日';
-                if (m === 9 && d === Math.floor(23.2488 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '秋分の日';
-
-                return null;
+                if (flyerList.length > 0) {
+                    flyerList.forEach(url => {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.alt = 'フライヤー画像';
+                        img.className = 'w-full rounded border-2 border-[#12100e] shadow-md object-contain max-h-[350px]';
+                        modalFlyerContainer.appendChild(img);
+                    });
+                    modalFlyerContainer.classList.remove('hidden');
+                    modalFlyerContainer.classList.add('flex');
+                } else {
+                    modalFlyerContainer.classList.add('hidden');
+                    modalFlyerContainer.classList.remove('flex');
+                }
             }
 
-            // 第一水曜日かどうかを判定する関数
-            function isFirstWednesday(year, month, day) {
-                const date = new Date(year, month, day);
-                return date.getDay() === 3 && day <= 7;
-            }
+            if (modalTitle && modalContent && modalTicketBtn) {
+                if (liveData) {
+                    modalTitle.textContent = liveData.title || '公演詳細';
+                    modalContent.innerHTML = `
+                        <p><span class="text-[#801e20]">【会場】</span> ${liveData.venue || '未定'} (${liveData.location || ''})</p>
+                        <p><span class="text-[#801e20]">【時間】</span> ${liveData.time || '未定'}</p>
+                        <p><span class="text-[#801e20]">【料金】</span> ${liveData.price || '未定'}</p>
+                    `;
 
-            // カレンダー描画関数
-function renderCalendar(year, month) {
-    if (!calendarDaysEl) return;
-    calendarDaysEl.innerHTML = '';
-
-    if (currentMonthYearEl) {
-        currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
-    }
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
-    
-    // 前月の最終日を取得（前月の日付計算用）
-    const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-    // 常に6行（7列×6行＝42マス）に固定
-    const totalGridCells = 42;
-
-    // 1. 【前月の日付】をうっすら表示
-    for (let i = firstDay - 1; i >= 0; i--) {
-        const prevDay = prevMonthLastDay - i;
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
-        emptyCell.textContent = prevDay;
-        calendarDaysEl.appendChild(emptyCell);
-    }
-
-    // 2. 【当月の日付】を表示
-    for (let day = 1; day <= totalDays; day++) {
-        const dateKey = formatDateKey(year, month, day);
-        const liveData = liveEvents[dateKey];
-        const hasRadio = isFirstWednesday(year, month, day);
-
-        const holidayName = getHolidayName(year, month, day);
-        const dayOfWeek = new Date(year, month, day).getDay();
-        const isSunday = (dayOfWeek === 0);
-        const isSaturday = (dayOfWeek === 6);
-        const isHoliday = !!holidayName;
-
-        let dayNumberColor = 'text-[#12100e]';
-        if (isSunday || isHoliday) {
-            dayNumberColor = 'text-[#801e20]';
-        } else if (isSaturday) {
-            dayNumberColor = 'text-[#1c2d42]';
-        }
-
-        const dayCell = document.createElement('div');
-        dayCell.className = 'h-12 sm:h-20 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
-
-        let innerHTML = `
-            <div class="flex justify-between items-start leading-none gap-0.5">
-                <span class="font-black text-xs sm:text-base ${dayNumberColor} group-hover:text-[#e8e0d5] shrink-0">${day}</span>
-                ${isHoliday ? `<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">${holidayName}</span>` : ''}
-            </div>
-        `;
-
-        innerHTML += `<div class="flex flex-col gap-0.5 w-full mt-auto">`;
-
-        if (liveData) {
-            const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
-            innerHTML += `
-            <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
-                ${pref}
-            </div>
-        `;
-        }
-
-        if (hasRadio) {
-            innerHTML += `
-            <div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
-                ラジオ
-            </div>
-        `;
-        }
-
-        innerHTML += `</div>`;
-        dayCell.innerHTML = innerHTML;
-        calendarDaysEl.appendChild(dayCell);
-    }
-
-    // 3. 【翌月の日付】をうっすら表示
-    const remainingCells = totalGridCells - (firstDay + totalDays);
-    for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
-        emptyCell.textContent = nextDay;
-        calendarDaysEl.appendChild(emptyCell);
-    }
-            }
-
-            // モーダル非表示
-            function closeModal() {
-                if (modalEl) modalEl.classList.add('hidden');
-            }
-
-            // 月切り替えイベント
-            if (prevMonthBtn) {
-                prevMonthBtn.addEventListener('click', () => {
-                    displayMonth--;
-                    if (displayMonth < 0) {
-                        displayMonth = 11;
-                        displayYear--;
+                    if (liveData.ticketUrl) {
+                        modalTicketBtn.href = liveData.ticketUrl;
+                        modalTicketBtn.classList.remove('hidden');
+                    } else {
+                        modalTicketBtn.classList.add('hidden');
                     }
-                    renderCalendar(displayYear, displayMonth);
-                });
+                } else {
+                    modalTitle.textContent = '予定情報';
+                    modalContent.innerHTML = '<p>この日のライブ予定はありません。</p>';
+                    modalTicketBtn.classList.add('hidden');
+                }
             }
 
-            if (nextMonthBtn) {
-                nextMonthBtn.addEventListener('click', () => {
-                    displayMonth++;
-                    if (displayMonth > 11) {
-                        displayMonth = 0;
-                        displayYear++;
-                    }
-                    renderCalendar(displayYear, displayMonth);
-                });
+            if (modalRadioBtn) {
+                if (hasRadio) {
+                    modalRadioBtn.classList.remove('hidden');
+                } else {
+                    modalRadioBtn.classList.add('hidden');
+                }
             }
 
-            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+            modalEl.classList.remove('hidden');
+        }
 
-            if (modalEl) {
-                modalEl.addEventListener('click', (e) => {
-                    if (e.target === modalEl) closeModal();
-                });
+        // カレンダー描画関数（常に6行42マス固定）
+        function renderCalendar(year, month) {
+            if (!calendarDaysEl) return;
+            calendarDaysEl.innerHTML = '';
+
+            if (currentMonthYearEl) {
+                currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
             }
 
-            // 初期表示
-            renderCalendar(displayYear, displayMonth);
-        </script>
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            const totalGridCells = 42;
+
+            // 1. 前月の日付
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const prevDay = prevMonthLastDay - i;
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
+                emptyCell.textContent = prevDay;
+                calendarDaysEl.appendChild(emptyCell);
+            }
+
+            // 2. 当月の日付
+            for (let day = 1; day <= totalDays; day++) {
+                const dateKey = formatDateKey(year, month, day);
+                const liveData = liveEvents[dateKey];
+                const hasRadio = isFirstWednesday(year, month, day);
+
+                const holidayName = getHolidayName(year, month, day);
+                const dayOfWeek = new Date(year, month, day).getDay();
+                const isSunday = (dayOfWeek === 0);
+                const isSaturday = (dayOfWeek === 6);
+                const isHoliday = !!holidayName;
+
+                let dayNumberColor = 'text-[#12100e]';
+                if (isSunday || isHoliday) {
+                    dayNumberColor = 'text-[#801e20]';
+                } else if (isSaturday) {
+                    dayNumberColor = 'text-[#1c2d42]';
+                }
+
+                const dayCell = document.createElement('div');
+                dayCell.className = 'h-12 sm:h-20 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] select-none';
+
+                let innerHTML = `
+                    <div class="flex justify-between items-start leading-none gap-0.5 pointer-events-none">
+                        <span class="font-black text-xs sm:text-base ${dayNumberColor} group-hover:text-[#e8e0d5] shrink-0">${day}</span>
+                        ${isHoliday ? `<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">${holidayName}</span>` : ''}
+                    </div>
+                `;
+
+                innerHTML += `<div class="flex flex-col gap-0.5 w-full mt-auto pointer-events-none">`;
+
+                if (liveData) {
+                    const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
+                    innerHTML += `
+                    <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
+                        ${pref}
+                    </div>
+                `;
+                }
+
+                if (hasRadio) {
+                    innerHTML += `
+                    <div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
+                        ラジオ
+                    </div>
+                `;
+                }
+
+                innerHTML += `</div>`;
+                dayCell.innerHTML = innerHTML;
+
+                // スマホ（タップ）とPC（クリック）の両方に対応
+                const handleOpen = (e) => {
+                    openModal(dateKey, liveData, hasRadio);
+                };
+
+                dayCell.addEventListener('click', handleOpen);
+
+                calendarDaysEl.appendChild(dayCell);
+            }
+
+            // 3. 翌月の日付
+            const remainingCells = totalGridCells - (firstDay + totalDays);
+            for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
+                emptyCell.textContent = nextDay;
+                calendarDaysEl.appendChild(emptyCell);
+            }
+        }
+
+        // モーダル非表示
+        function closeModal() {
+            if (modalEl) modalEl.classList.add('hidden');
+        }
+
+        // 月切り替えイベント
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                displayMonth--;
+                if (displayMonth < 0) {
+                    displayMonth = 11;
+                    displayYear--;
+                }
+                renderCalendar(displayYear, displayMonth);
+            });
+        }
+
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', () => {
+                displayMonth++;
+                if (displayMonth > 11) {
+                    displayMonth = 0;
+                    displayYear++;
+                }
+                renderCalendar(displayYear, displayMonth);
+            });
+        }
+
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+
+        if (modalEl) {
+            modalEl.addEventListener('click', (e) => {
+                if (e.target === modalEl) closeModal();
+            });
+        }
+
+        // 初期表示
+        renderCalendar(displayYear, displayMonth);
+    </script>
 </body>
 
 </html>
