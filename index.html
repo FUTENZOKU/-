@@ -288,17 +288,7 @@
                 price: '一般 ¥4,400 / U-22 ¥2,200',
                 ticketUrl: 'https://t.co/7dvMETTkvl',
                 flyerUrl: ''
-            },
-            '2026-12-26': {
-                type: 'live',
-                title: '未定,
-                location: '東京',
-                venue: '未定',
-                time: '',
-                price: '',
-                ticketUrl: '',
-                flyerUrl: ''
-            },
+            }
         };
 
         // DOM要素の取得
@@ -409,7 +399,7 @@
                         <p><span class="text-[#801e20]">【料金】</span> ${liveData.price || '未定'}</p>
                     `;
                     if (hasRadio) {
-                        contentHTML += `<p class="mt-2 pt-2 border-t border-[#12100e]/30"><span class="text-[#1c2d42]">【ラジオ】</span> bayfm『78 musi-curate』放送日 (27:00〜)</p>`;
+                        contentHTML += `<p class="mt-2 pt-2 border-t border-[#12100e]/30"><span class="text-[#1c2d42]">【ラジオ】</span> bayfm『CURATE radio』放送日 (27:00〜)</p>`;
                     }
                     modalContent.innerHTML = contentHTML;
 
@@ -422,7 +412,7 @@
                 } else if (hasRadio) {
                     modalTitle.textContent = 'ラジオ出演';
                     modalContent.innerHTML = `
-                        <p><span class="text-[#1c2d42]">【番組名】</span> bayfm『78 music-urate』</p>
+                        <p><span class="text-[#1c2d42]">【番組名】</span> bayfm『CURATE radio』</p>
                         <p><span class="text-[#1c2d42]">【時間】</span> 毎週第一水曜日 27:00〜（木曜午前3時）</p>
                     `;
                     modalTicketBtn.classList.add('hidden');
