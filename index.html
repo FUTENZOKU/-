@@ -115,9 +115,9 @@
                 公演詳細
             </h3>
 
-            <!-- フライヤー画像表示枠 -->
-            <div id="modalFlyerContainer" class="mb-4 hidden text-center">
-                <img id="modalFlyer" src="" alt="公演フライヤー" class="w-full max-h-80 object-contain border-2 border-[#12100e] shadow-[4px_4px_0px_0px_rgba(18,16,14,1)] bg-[#12100e]/5">
+            <!-- フライヤー画像表示エリア（1枚でも複数枚でも縦に綺麗に並びます） -->
+            <div id="modalFlyerContainer" class="mb-4 hidden flex-col gap-3 text-center">
+                <!-- JavaScriptで動的に画像タグが生成されます -->
             </div>
 
             <div id="modalContent" class="space-y-3 mb-6 text-sm font-bold text-[#12100e]">
@@ -140,7 +140,7 @@
 
     <!-- JavaScript 処理 -->
     <script>
-        // 公演データ（flyerUrl に画像のパスやURLを指定できます）
+        // 公演データ（flyerUrl は '画像名.jpg' または ['画像1.jpg', '画像2.jpg'] のどちらでもOKです）
         const liveEvents = {
             '2026-10-06': {
                 type: 'live',
@@ -150,7 +150,7 @@
                 time: '18:15 開場 / 19:00 開演',
                 price: '前売 ¥4,500 (+1D)',
                 ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971',
-                flyerUrl: '' // ここに画像URLを入れると表示されます
+                flyerUrl: '1006.jpg' 
             },
             '2026-10-12': {
                 type: 'live',
@@ -160,7 +160,7 @@
                 time: '18:30 開場 / 19:00 開演',
                 price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
                 ticketUrl: 'https://tiget.net/events/526970',
-                flyerUrl: ''
+                flyerUrl: '1012.jpg'
             },
             '2026-10-18': {
                 type: 'live',
@@ -170,7 +170,7 @@
                 time: '18:00 開場 / 19:00 開演',
                 price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
                 ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9',
-                flyerUrl: ''
+                flyerUrl: '1018.jpg'
             },
             '2026-10-23': {
                 type: 'live',
@@ -180,7 +180,7 @@
                 time: '18:30 開場 / 19:00 開演',
                 price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
                 ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
-                flyerUrl: ''
+                flyerUrl: '1023.jpg'
             },
             '2026-10-24': {
                 type: 'live',
@@ -200,7 +200,7 @@
                 time: '12:00 開場 / 13:00 開演',
                 price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
                 ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5',
-                flyerUrl: ''
+                flyerUrl: ['1025A.jpg','1025B.jpg']
             },
             '2026-10-31': {
                 type: 'live',
@@ -210,7 +210,7 @@
                 time: '17:30 開場 / 18:00 開演',
                 price: '前売 ¥2,500 (+1D)',
                 ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6',
-                flyerUrl: ''
+                flyerUrl: '1031.jpg'
             }
         };
 
@@ -228,7 +228,6 @@
         const modalContent = document.getElementById('modalContent');
         const modalTicketBtn = document.getElementById('modalTicketBtn');
         const modalFlyerContainer = document.getElementById('modalFlyerContainer');
-        const modalFlyer = document.getElementById('modalFlyer');
 
         let now = new Date();
         let displayYear = now.getFullYear();
@@ -314,8 +313,12 @@
 
             let htmlContent = '';
 
-            // フライヤー画像の初期化（非表示）
-            if (modalFlyerContainer) modalFlyerContainer.classList.add('hidden');
+            // フライヤーコンテナの初期化
+            if (modalFlyerContainer) {
+                modalFlyerContainer.innerHTML = '';
+                modalFlyerContainer.classList.add('hidden');
+                modalFlyerContainer.classList.remove('flex');
+            }
 
             if (liveData) {
                 if (modalTitle) modalTitle.textContent = liveData.title;
@@ -325,10 +328,22 @@
                     <p><strong>料金：</strong> ${liveData.price}</p>
                 `;
 
-                // フライヤー画像がある場合は表示
-                if (liveData.flyerUrl && modalFlyer && modalFlyerContainer) {
-                    modalFlyer.src = liveData.flyerUrl;
-                    modalFlyerContainer.classList.remove('hidden');
+                // フライヤー画像の描画処理（1枚でも配列で複数枚でも対応）
+                if (liveData.flyerUrl && modalFlyerContainer) {
+                    const flyers = Array.isArray(liveData.flyerUrl) ? liveData.flyerUrl : [liveData.flyerUrl];
+                    const validFlyers = flyers.filter(url => url && url.trim() !== '');
+
+                    if (validFlyers.length > 0) {
+                        validFlyers.forEach(url => {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = '公演フライヤー';
+                            img.className = 'w-full max-h-80 object-contain border-2 border-[#12100e] shadow-[4px_4px_0px_0px_rgba(18,16,14,1)] bg-[#12100e]/5';
+                            modalFlyerContainer.appendChild(img);
+                        });
+                        modalFlyerContainer.classList.remove('hidden');
+                        modalFlyerContainer.classList.add('flex');
+                    }
                 }
 
                 if (modalTicketBtn) {
