@@ -355,174 +355,93 @@
             }
 
             // カレンダー描画関数
-            function renderCalendar(year, month) {
-                if (!calendarDaysEl) return;
-                calendarDaysEl.innerHTML = '';
+function renderCalendar(year, month) {
+    if (!calendarDaysEl) return;
+    calendarDaysEl.innerHTML = '';
 
-                if (currentMonthYearEl) {
-                    currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
-                }
+    if (currentMonthYearEl) {
+        currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
+    }
 
-                const firstDay = new Date(year, month, 1).getDay();
-                const totalDays = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    
+    // 前月の最終日を取得（前月の日付計算用）
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
 
-                // 月初めの空セル
-                for (let i = 0; i < firstDay; i++) {
-                    const emptyCell = document.createElement('div');
-                    emptyCell.className = 'h-14 sm:h-24 bg-white border border-[#12100e]/20';
-                    calendarDaysEl.appendChild(emptyCell);
-                }
+    // 常に6行（7列×6行＝42マス）に固定
+    const totalGridCells = 42;
 
-                // 当月の日付セル
-                for (let day = 1; day <= totalDays; day++) {
-                    const dateKey = formatDateKey(year, month, day);
-                    const liveData = liveEvents[dateKey];
-                    const hasRadio = isFirstWednesday(year, month, day);
+    // 1. 【前月の日付】をうっすら表示
+    for (let i = firstDay - 1; i >= 0; i--) {
+        const prevDay = prevMonthLastDay - i;
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
+        emptyCell.textContent = prevDay;
+        calendarDaysEl.appendChild(emptyCell);
+    }
 
-                    // 祝日・土日の判定
-                    const holidayName = getHolidayName(year, month, day);
-                    const dayOfWeek = new Date(year, month, day).getDay();
-                    const isSunday = (dayOfWeek === 0);
-                    const isSaturday = (dayOfWeek === 6);
-                    const isHoliday = !!holidayName;
+    // 2. 【当月の日付】を表示
+    for (let day = 1; day <= totalDays; day++) {
+        const dateKey = formatDateKey(year, month, day);
+        const liveData = liveEvents[dateKey];
+        const hasRadio = isFirstWednesday(year, month, day);
 
-                    // 日付数字の色を指定（日曜・祝日は赤、土曜は深紺）
-                    let dayNumberColor = 'text-[#12100e]';
-                    if (isSunday || isHoliday) {
-                        dayNumberColor = 'text-[#801e20]'; // 朱赤
-                    } else if (isSaturday) {
-                        dayNumberColor = 'text-[#1c2d42]'; // 深紺
-                    }
+        const holidayName = getHolidayName(year, month, day);
+        const dayOfWeek = new Date(year, month, day).getDay();
+        const isSunday = (dayOfWeek === 0);
+        const isSaturday = (dayOfWeek === 6);
+        const isHoliday = !!holidayName;
 
-                    const dayCell = document.createElement('div');
-                    // 高さを h-14 sm:h-24 にアップ
-                    dayCell.className = 'h-14 sm:h-24 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
+        let dayNumberColor = 'text-[#12100e]';
+        if (isSunday || isHoliday) {
+            dayNumberColor = 'text-[#801e20]';
+        } else if (isSaturday) {
+            dayNumberColor = 'text-[#1c2d42]';
+        }
 
-                    // 日付数字と祝日名
-                    let innerHTML = `
-                        <div class="flex justify-between items-start leading-none gap-0.5">
-                            <span class="font-black text-xs sm:text-base ${dayNumberColor} group-hover:text-[#e8e0d5] shrink-0">${day}</span>
-                            ${isHoliday ? `<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">${holidayName}</span>` : ''}
-                        </div>
-                    `;
+        const dayCell = document.createElement('div');
+        dayCell.className = 'h-12 sm:h-20 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
 
-                    // バッジ部分（文字サイズとパディングを極小調整してはみ出し防止）
-                    innerHTML += `<div class="flex flex-col gap-0.5 w-full mt-auto">`;
+        let innerHTML = `
+            <div class="flex justify-between items-start leading-none gap-0.5">
+                <span class="font-black text-xs sm:text-base ${dayNumberColor} group-hover:text-[#e8e0d5] shrink-0">${day}</span>
+                ${isHoliday ? `<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">${holidayName}</span>` : ''}
+            </div>
+        `;
 
-                    // ライブ情報がある場合
-                    if (liveData) {
-                        const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
-                        innerHTML += `
-                        <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
-                            ${pref}
-                        </div>
-                    `;
-                    }
+        innerHTML += `<div class="flex flex-col gap-0.5 w-full mt-auto">`;
 
-                    // 第一水曜日のラジオ
-                    if (hasRadio) {
-                        innerHTML += `
-                        <div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
-                            ラジオ
-                        </div>
-                    `;
-                    }
+        if (liveData) {
+            const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
+            innerHTML += `
+            <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
+                ${pref}
+            </div>
+        `;
+        }
 
-                    innerHTML += `</div>`;
-                    dayCell.innerHTML = innerHTML;
+        if (hasRadio) {
+            innerHTML += `
+            <div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
+                ラジオ
+            </div>
+        `;
+        }
 
-                    dayCell.addEventListener('click', () => {
-                        openModal(year, month, day, liveData, hasRadio);
-                    });
+        innerHTML += `</div>`;
+        dayCell.innerHTML = innerHTML;
+        calendarDaysEl.appendChild(dayCell);
+    }
 
-                    calendarDaysEl.appendChild(dayCell);
-                }
-            }
-
-            // モーダル表示
-            function openModal(year, month, day, liveData, hasRadio) {
-                const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
-                if (modalDateBadge) modalDateBadge.textContent = dateStr;
-
-                let htmlContent = '';
-
-                // ボタン表示の初期化（一旦非表示）
-                if (modalTicketBtn) modalTicketBtn.style.display = 'none';
-                if (modalRadioBtn) modalRadioBtn.classList.add('hidden');
-
-                // フライヤーコンテナの初期化
-                if (modalFlyerContainer) {
-                    modalFlyerContainer.innerHTML = '';
-                    modalFlyerContainer.classList.add('hidden');
-                    modalFlyerContainer.classList.remove('flex');
-                }
-
-                if (liveData) {
-                    if (modalTitle) modalTitle.textContent = liveData.title;
-                    htmlContent += `
-                    <p><strong>会場：</strong> ${liveData.venue}</p>
-                    <p><strong>時間：</strong> ${liveData.time}</p>
-                    <p><strong>料金：</strong> ${liveData.price}</p>
-                `;
-
-                    // フライヤー画像の描画処理（1枚でも配列で複数枚でも対応）
-                    if (liveData.flyerUrl && modalFlyerContainer) {
-                        const flyers = Array.isArray(liveData.flyerUrl) ? liveData.flyerUrl : [liveData.flyerUrl];
-                        const validFlyers = flyers.filter(url => url && url.trim() !== '');
-
-                        if (validFlyers.length > 0) {
-                            validFlyers.forEach(url => {
-                                const img = document.createElement('img');
-                                img.src = url;
-                                img.alt = '公演フライヤー';
-                                img.className = 'w-full max-h-80 object-contain border-2 border-[#12100e] shadow-[4px_4px_0px_0px_rgba(18,16,14,1)] bg-[#12100e]/5';
-                                modalFlyerContainer.appendChild(img);
-                            });
-                            modalFlyerContainer.classList.remove('hidden');
-                            modalFlyerContainer.classList.add('flex');
-                        }
-                    }
-
-                    // チケット予約ボタンの表示設定
-                    if (modalTicketBtn && liveData.ticketUrl) {
-                        modalTicketBtn.href = liveData.ticketUrl;
-                        modalTicketBtn.textContent = 'チケット予約';
-                        modalTicketBtn.style.display = 'inline-block';
-                    }
-
-                    // ラジオと同日の場合はラジオボタンも表示！
-                    if (hasRadio && modalRadioBtn) {
-                        modalRadioBtn.classList.remove('hidden');
-                    }
-
-                } else if (hasRadio) {
-                    if (modalTitle) modalTitle.textContent = '78 musi-curate フーテンラジオ';
-                    htmlContent += `
-                    <p><strong>放送形態：</strong> BAY FM ラジオ放送</p>
-                    <p><strong>放送時間：</strong> 27:00 〜 配信開始</p>
-                    <p class="font-normal mt-2 leading-relaxed">毎月第一水曜日の定期ラジオ放送日です。</p>
-                `;
-                    // ラジオ単体の日はラジオボタンを表示
-                    if (modalRadioBtn) {
-                        modalRadioBtn.classList.remove('hidden');
-                    }
-                } else {
-                    if (modalTitle) modalTitle.textContent = '公演情報はありません';
-                    htmlContent = '<p class="font-normal text-[#12100e]/80">本日の予定公演・出演はありません。</p>';
-                }
-
-                // もしライブとラジオが同日の場合
-                if (liveData && hasRadio) {
-                    htmlContent += `
-                    <div class="mt-4 pt-3 border-t border-[#12100e]/40 text-xs">
-                        <p class="text-[#1c2d42] font-bold">【ラジオ放送日】</p>
-                        <p class="font-normal">本日第一水曜日は定期ラジオ放送日でもあります。</p>
-                    </div>
-                `;
-                }
-
-                if (modalContent) modalContent.innerHTML = htmlContent;
-                if (modalEl) modalEl.classList.remove('hidden');
+    // 3. 【翌月の日付】をうっすら表示
+    const remainingCells = totalGridCells - (firstDay + totalDays);
+    for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none';
+        emptyCell.textContent = nextDay;
+        calendarDaysEl.appendChild(emptyCell);
+    }
             }
 
             // モーダル非表示
