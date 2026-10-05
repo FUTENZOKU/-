@@ -106,7 +106,8 @@
             </button>
 
             <div id="modalBadgeContainer" class="flex flex-wrap gap-2 mb-3">
-                <div class="inline-block bg-[#801e20] text-[#e8e0d5] text-xs font-bold px-2 py-1 border border-[#12100e]">
+                <div
+                    class="inline-block bg-[#801e20] text-[#e8e0d5] text-xs font-bold px-2 py-1 border border-[#12100e]">
                     <span id="modalDateBadge"></span>
                 </div>
             </div>
@@ -124,274 +125,283 @@
                 <!-- JavaScriptで詳細を差し込みます -->
             </div>
 
-            <div class="flex justify-between items-center pt-4 border-t-2 border-[#12100e]">
-                <a id="modalTicketBtn" href="#" target="_blank"
-                    class="bg-[#801e20] text-[#e8e0d5] hover:bg-[#12100e] font-black px-4 py-2 border-2 border-[#12100e] shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] transition-colors">
-                    チケット予約
-                </a>
+            <div class="flex flex-wrap gap-2 justify-between items-center pt-4 border-t-2 border-[#12100e]">
+                <div class="flex flex-wrap gap-2">
+                    <a id="modalTicketBtn" href="#" target="_blank"
+                        class="bg-[#801e20] text-[#e8e0d5] hover:bg-[#12100e] font-black px-3 py-2 text-xs sm:text-sm border-2 border-[#12100e] shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] transition-colors">
+                        チケット予約
+                    </a>
+                    <a id="modalRadioBtn" href="https://program.bayfm.co.jp/curate/" target="_blank"
+                        class="hidden bg-[#1c2d42] text-[#e8e0d5] hover:bg-[#12100e] font-black px-3 py-2 text-xs sm:text-sm border-2 border-[#12100e] shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] transition-colors">
+                        ラジオを聴く
+                    </a>
+                </div>
                 <button id="modalCloseBtn"
-                    class="border-2 border-[#12100e] bg-[#cbbfae] hover:bg-[#12100e] hover:text-[#e8e0d5] font-bold px-4 py-2">
+                    class="border-2 border-[#12100e] bg-[#cbbfae] hover:bg-[#12100e] hover:text-[#e8e0d5] font-bold px-3 py-2 text-xs sm:text-sm">
                     閉じる
                 </button>
             </div>
-
         </div>
-    </div>
 
-    <!-- JavaScript 処理 -->
-    <script>
-        // 公演データ（flyerUrl は '画像名.jpg' または ['画像1.jpg', '画像2.jpg'] のどちらでもOKです）
-        const liveEvents = {
-            '2026-10-06': {
-                type: 'live',
-                title: '『渋谷うたの日』',
-                location: '東京・渋谷',
-                venue: 'Spotify O-WEST',
-                time: '18:15 開場 / 19:00 開演',
-                price: '前売 ¥4,500 (+1D)',
-                ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971',
-                flyerUrl: '1006.jpeg' 
-            },
-            '2026-10-12': {
-                type: 'live',
-                title: 'The Strange Boutique',
-                location: '東京・渋谷',
-                venue: 'CLUB CRAWL',
-                time: '18:30 開場 / 19:00 開演',
-                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                ticketUrl: 'https://tiget.net/events/526970',
-                flyerUrl: '1012.jpg'
-            },
-            '2026-10-18': {
-                type: 'live',
-                title: '2026年フーテン族の音楽会 第三夜',
-                location: '東京・渋谷',
-                venue: 'B.Y.G',
-                time: '18:00 開場 / 19:00 開演',
-                price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
-                ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9',
-                flyerUrl: '1018.jpg'
-            },
-            '2026-10-23': {
-                type: 'live',
-                title: 'TSURUMAI EMPATHY',
-                location: '愛知・名古屋',
-                venue: 'DAYTRIP',
-                time: '18:30 開場 / 19:00 開演',
-                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
-                flyerUrl: '1023.jpeg'
-            },
-            '2026-10-24': {
-                type: 'live',
-                title: 'YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026',
-                location: '群馬・高崎',
-                venue: 'the Groove TAKASAKI',
-                time: '16:30 開場 / 17:00 開演',
-                price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
-                ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
-                flyerUrl: '1024NEW.jpeg'
-            },
-            '2026-10-25': {
-                type: 'live',
-                title: '武蔵野えれじい',
-                location: '東京・吉祥寺',
-                venue: '全4会場',
-                time: '12:00 開場 / 13:00 開演',
-                price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
-                ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5',
-                flyerUrl: ['1025A.jpeg','1025B.jpeg']
-            },
-            '2026-10-31': {
-                type: 'live',
-                title: 'Win-Win HalloWeen',
-                location: '長野・岡谷',
-                venue: '岡谷Music Bar UzuUzu',
-                time: '17:30 開場 / 18:00 開演',
-                price: '前売 ¥2,500 (+1D)',
-                ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6',
-                flyerUrl: '10.31.jpg'
-             },
-            '2026-11-03': {
-                type: 'live',
-                title: '琴線に触れる vol.32',
-                location: '兵庫・神戸',
-                venue: '神戸 Varit.',
-                time: '17:00 開場 / 17:30 開演',
-                price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
-                ticketUrl: 'https://forms.gle/3b6MFMMnKiw3XxvP7',
-                flyerUrl: ''
-             },
-            '2026-11-04': {
-                type: 'live',
-                title: 'フーテン族 ワンマンコンサート',
-                location: '京都・上京区',
-                venue: 'COFFEE HOUSE 拾得',
-                time: '17:30 開場 / 19:00 開演',
-                price: '前売 ¥3,500 / 当日 ¥4,500 / 学割 ¥2,000 (+1D)',
-                ticketUrl: 'https://forms.gle/xLAxunRbmncVHZaa6',
-                flyerUrl: '1104.jpg'
-　            },
-            '2026-11-24': {
-                type: 'live',
-                title: '止まらない何か Vol.20',
-                location: '東京・新宿',
-                venue: '新宿 red cloth',
-                time: '18:15 開場 / 18:45 開演',
-                price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
-                ticketUrl: 'https://forms.gle/R995MkDhizung5Zk8',
-                flyerUrl: '1124.jpeg'
-              },
-            '2026-11-29': {
-                type: 'live',
-                title: 'ツーマン',
-                location: '東京',
-                venue: '未定',
-                time: '未定',
-                price: '未定',
-                ticketUrl: '',
-                flyerUrl: ''
-            　},
-            '2026-12-20': {
-                type: 'live',
-                title: '未定',
-                location: '大阪',
-                venue: '未定',
-                time: '未定',
-                price: '未定',
-                ticketUrl: '',
-                flyerUrl: ''
-            　},
-            '2026-12-21': {
-                type: 'live',
-                title: '未定',
-                location: '愛知',
-                venue: '未定',
-                time: '未定',
-                price: '未定',
-                ticketUrl: '',
-                flyerUrl: ''
-            　},
-            '2026-01-10': {
-                type: 'live',
-                title: 'ロックンロールサーカス2027',
-                location: '兵庫・神戸',
-                venue: '未定',
-                time: '12:00 開場 / 13:00 開演',
-                price: '二日券 ¥14,700 / U-25 ¥8,200 一日券 ¥7,900 / U-25 ¥4,600',
-                ticketUrl: 'https://t.co/RZQ2HOscUC',
-                flyerUrl: '0110.jpeg'
-            　},
-            '2026-01-11': {
-                type: 'live',
-                title: 'ロックンロールをはじめよう',
-                location: '東京・鶯谷',
-                venue: '新世紀ダンスホール',
-                time: '16:30 開場 / 17:00 開演',
-                price: '一般 ¥4,400 / U-22 ¥2,200',
-                ticketUrl: 'https://t.co/7dvMETTkvl',
-                flyerUrl: ''
-            }
-        };
+        <!-- JavaScript 処理 -->
+        <script>
+            // 公演データ（flyerUrl は '画像名.jpg' または ['画像1.jpg', '画像2.jpg'] のどちらでもOKです）
+            const liveEvents = {
+                '2026-10-06': {
+                    type: 'live',
+                    title: '『渋谷うたの日』',
+                    location: '東京・渋谷',
+                    venue: 'Spotify O-WEST',
+                    time: '18:15 開場 / 19:00 開演',
+                    price: '前売 ¥4,500 (+1D)',
+                    ticketUrl: 'https://t.pia.jp/pia/event/event.do?eventCd=2619971',
+                    flyerUrl: '1006.jpeg'
+                },
+                '2026-10-12': {
+                    type: 'live',
+                    title: 'The Strange Boutique',
+                    location: '東京・渋谷',
+                    venue: 'CLUB CRAWL',
+                    time: '18:30 開場 / 19:00 開演',
+                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                    ticketUrl: 'https://tiget.net/events/526970',
+                    flyerUrl: '1012.jpg'
+                },
+                '2026-10-18': {
+                    type: 'live',
+                    title: '2026年フーテン族の音楽会 第三夜',
+                    location: '東京・渋谷',
+                    venue: 'B.Y.G',
+                    time: '18:00 開場 / 19:00 開演',
+                    price: '一般 ¥3,500 / 学生 ¥2,000 (+1D)',
+                    ticketUrl: 'https://forms.gle/nLAkV76L2XMfpW8T9',
+                    flyerUrl: '1018.jpg'
+                },
+                '2026-10-23': {
+                    type: 'live',
+                    title: 'TSURUMAI EMPATHY',
+                    location: '愛知・名古屋',
+                    venue: 'DAYTRIP',
+                    time: '18:30 開場 / 19:00 開演',
+                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                    ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
+                    flyerUrl: '1023.jpeg'
+                },
+                '2026-10-24': {
+                    type: 'live',
+                    title: 'YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026',
+                    location: '群馬・高崎',
+                    venue: 'the Groove TAKASAKI',
+                    time: '16:30 開場 / 17:00 開演',
+                    price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
+                    ticketUrl: 'https://forms.gle/W9T8KuMurd4iC4jR9',
+                    flyerUrl: '1024NEW.jpeg'
+                },
+                '2026-10-25': {
+                    type: 'live',
+                    title: '武蔵野えれじい',
+                    location: '東京・吉祥寺',
+                    venue: '全4会場',
+                    time: '12:00 開場 / 13:00 開演',
+                    price: '一般 ¥4,800 / 学生 ¥4,000 (+1D)',
+                    ticketUrl: 'https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5',
+                    flyerUrl: ['1025A.jpeg', '1025B.jpeg']
+                },
+                '2026-10-31': {
+                    type: 'live',
+                    title: 'Win-Win HalloWeen',
+                    location: '長野・岡谷',
+                    venue: '岡谷Music Bar UzuUzu',
+                    time: '17:30 開場 / 18:00 開演',
+                    price: '前売 ¥2,500 (+1D)',
+                    ticketUrl: 'https://forms.gle/9HFnmCiBBAfJCttd6',
+                    flyerUrl: '10.31.jpg'
+                },
+                '2026-11-03': {
+                    type: 'live',
+                    title: '琴線に触れる vol.32',
+                    location: '兵庫・神戸',
+                    venue: '神戸 Varit.',
+                    time: '17:00 開場 / 17:30 開演',
+                    price: '前売 ¥3,000 / 当日 ¥3,500 (+1D)',
+                    ticketUrl: 'https://forms.gle/3b6MFMMnKiw3XxvP7',
+                    flyerUrl: ''
+                },
+                '2026-11-04': {
+                    type: 'live',
+                    title: 'フーテン族 ワンマンコンサート',
+                    location: '京都・上京区',
+                    venue: 'COFFEE HOUSE 拾得',
+                    time: '17:30 開場 / 19:00 開演',
+                    price: '前売 ¥3,500 / 当日 ¥4,500 / 学割 ¥2,000 (+1D)',
+                    ticketUrl: 'https://forms.gle/xLAxunRbmncVHZaa6',
+                    flyerUrl: '1104.jpg'
+                },
+                '2026-11-24': {
+                    type: 'live',
+                    title: '止まらない何か Vol.20',
+                    location: '東京・新宿',
+                    venue: '新宿 red cloth',
+                    time: '18:15 開場 / 18:45 開演',
+                    price: '前売 ¥3,500 / 当日 ¥4,000 (+1D)',
+                    ticketUrl: 'https://forms.gle/R995MkDhizung5Zk8',
+                    flyerUrl: '1124.jpeg'
+                },
+                '2026-11-29': {
+                    type: 'live',
+                    title: 'ツーマン',
+                    location: '東京',
+                    venue: '未定',
+                    time: '未定',
+                    price: '未定',
+                    ticketUrl: '',
+                    flyerUrl: ''
+                },
+                '2026-12-20': {
+                    type: 'live',
+                    title: '未定',
+                    location: '大阪',
+                    venue: '未定',
+                    time: '未定',
+                    price: '未定',
+                    ticketUrl: '',
+                    flyerUrl: ''
+                },
+                '2026-12-21': {
+                    type: 'live',
+                    title: '未定',
+                    location: '愛知',
+                    venue: '未定',
+                    time: '未定',
+                    price: '未定',
+                    ticketUrl: '',
+                    flyerUrl: ''
+                },
+                '2026-01-10': {
+                    type: 'live',
+                    title: 'ロックンロールサーカス2027',
+                    location: '兵庫・神戸',
+                    venue: '未定',
+                    time: '12:00 開場 / 13:00 開演',
+                    price: '二日券 ¥14,700 / U-25 ¥8,200 一日券 ¥7,900 / U-25 ¥4,600',
+                    ticketUrl: 'https://t.co/RZQ2HOscUC',
+                    flyerUrl: '0110.jpeg'
+                },
+                '2026-01-11': {
+                    type: 'live',
+                    title: 'ロックンロールをはじめよう',
+                    location: '東京・鶯谷',
+                    venue: '新世紀ダンスホール',
+                    time: '16:30 開場 / 17:00 開演',
+                    price: '一般 ¥4,400 / U-22 ¥2,200',
+                    ticketUrl: 'https://t.co/7dvMETTkvl',
+                    flyerUrl: ''
+                }
+            };
 
-        // DOM要素の取得
-        const calendarDaysEl = document.getElementById('calendar-days');
-        const currentMonthYearEl = document.getElementById('currentMonthYear');
-        const prevMonthBtn = document.getElementById('prev-month');
-        const nextMonthBtn = document.getElementById('next-month');
+            // DOM要素の取得
+            const calendarDaysEl = document.getElementById('calendar-days');
+            const currentMonthYearEl = document.getElementById('currentMonthYear');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
 
-        const modalEl = document.getElementById('event-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
-        const modalDateBadge = document.getElementById('modalDateBadge');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
-        const modalTicketBtn = document.getElementById('modalTicketBtn');
-        const modalFlyerContainer = document.getElementById('modalFlyerContainer');
+            const modalEl = document.getElementById('event-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalDateBadge = document.getElementById('modalDateBadge');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const modalTicketBtn = document.getElementById('modalTicketBtn');
+            const modalRadioBtn = document.getElementById('modalRadioBtn');
+            const modalFlyerContainer = document.getElementById('modalFlyerContainer');
 
-        let now = new Date();
-        let displayYear = now.getFullYear();
-        let displayMonth = now.getMonth();
+            let now = new Date();
+            let displayYear = now.getFullYear();
+            let displayMonth = now.getMonth();
 
-        function formatDateKey(year, month, day) {
-            const m = String(month + 1).padStart(2, '0');
-            const d = String(day).padStart(2, '0');
-            return `${year}-${m}-${d}`;
-        }
-
-        // 第一水曜日かどうかを判定する関数
-        function isFirstWednesday(year, month, day) {
-            const date = new Date(year, month, day);
-            return date.getDay() === 3 && day <= 7;
-        }
-
-        // カレンダー描画関数
-        function renderCalendar(year, month) {
-            if (!calendarDaysEl) return;
-            calendarDaysEl.innerHTML = '';
-
-            if (currentMonthYearEl) {
-                currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
+            function formatDateKey(year, month, day) {
+                const m = String(month + 1).padStart(2, '0');
+                const d = String(day).padStart(2, '0');
+                return `${year}-${m}-${d}`;
             }
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            // 月初めの空セル
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-12 sm:h-24 bg-[#b3a893]/30 border border-[#12100e]/20';
-                calendarDaysEl.appendChild(emptyCell);
+            // 第一水曜日かどうかを判定する関数
+            function isFirstWednesday(year, month, day) {
+                const date = new Date(year, month, day);
+                return date.getDay() === 3 && day <= 7;
             }
 
-            // 当月の日付セル
-            for (let day = 1; day <= totalDays; day++) {
-                const dateKey = formatDateKey(year, month, day);
-                const liveData = liveEvents[dateKey];
-                const hasRadio = isFirstWednesday(year, month, day);
+            // カレンダー描画関数
+            function renderCalendar(year, month) {
+                if (!calendarDaysEl) return;
+                calendarDaysEl.innerHTML = '';
 
-                const dayCell = document.createElement('div');
-                dayCell.className = 'h-12 sm:h-24 border-2 border-[#12100e] bg-[#d8cebe] p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
+                if (currentMonthYearEl) {
+                    currentMonthYearEl.textContent = `${year}年 ${month + 1}月`;
+                }
 
-                let innerHTML = `<span class="font-black text-xs sm:text-base text-[#12100e] group-hover:text-[#e8e0d5] leading-none">${day}</span>`;
+                const firstDay = new Date(year, month, 1).getDay();
+                const totalDays = new Date(year, month + 1, 0).getDate();
 
-                innerHTML += `<div class="flex flex-col gap-0.5 sm:gap-1 w-full">`;
+                // 月初めの空セル
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'h-12 sm:h-24 bg-[#b3a893]/30 border border-[#12100e]/20';
+                    calendarDaysEl.appendChild(emptyCell);
+                }
 
-                // ライブ情報がある場合（赤バッジ）
-                if (liveData) {
-                    innerHTML += `
+                // 当月の日付セル
+                for (let day = 1; day <= totalDays; day++) {
+                    const dateKey = formatDateKey(year, month, day);
+                    const liveData = liveEvents[dateKey];
+                    const hasRadio = isFirstWednesday(year, month, day);
+
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'h-12 sm:h-24 border-2 border-[#12100e] bg-[#d8cebe] p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
+
+                    let innerHTML = `<span class="font-black text-xs sm:text-base text-[#12100e] group-hover:text-[#e8e0d5] leading-none">${day}</span>`;
+
+                    innerHTML += `<div class="flex flex-col gap-0.5 sm:gap-1 w-full">`;
+
+                    // ライブ情報がある場合（赤バッジ）
+                    if (liveData) {
+                        innerHTML += `
                         <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[9px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
                             ${liveData.location}
                         </div>
                     `;
-                }
+                    }
 
-                // 第一水曜日のラジオ（藍色・紺色バッジ）
-                if (hasRadio) {
-                    innerHTML += `
+                    // 第一水曜日のラジオ（藍色・紺色バッジ）
+                    if (hasRadio) {
+                        innerHTML += `
                         <div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[9px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
                             ラジオ
                         </div>
                     `;
+                    }
+
+                    innerHTML += `</div>`;
+                    dayCell.innerHTML = innerHTML;
+
+                    dayCell.addEventListener('click', () => {
+                        openModal(year, month, day, liveData, hasRadio);
+                    });
+
+                    calendarDaysEl.appendChild(dayCell);
                 }
-
-                innerHTML += `</div>`;
-                dayCell.innerHTML = innerHTML;
-
-                dayCell.addEventListener('click', () => {
-                    openModal(year, month, day, liveData, hasRadio);
-                });
-
-                calendarDaysEl.appendChild(dayCell);
             }
-        }
 
-        // モーダル表示
+// モーダル表示
         function openModal(year, month, day, liveData, hasRadio) {
             const dateStr = `${year}.${String(month + 1).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
             if (modalDateBadge) modalDateBadge.textContent = dateStr;
 
             let htmlContent = '';
+
+            // ボタン表示の初期化（一旦非表示）
+            if (modalTicketBtn) modalTicketBtn.style.display = 'none';
+            if (modalRadioBtn) modalRadioBtn.classList.add('hidden');
 
             // フライヤーコンテナの初期化
             if (modalFlyerContainer) {
@@ -426,15 +436,18 @@
                     }
                 }
 
-                if (modalTicketBtn) {
-                    if (liveData.ticketUrl) {
-                        modalTicketBtn.href = liveData.ticketUrl;
-                        modalTicketBtn.textContent = 'チケット予約';
-                        modalTicketBtn.style.display = 'inline-block';
-                    } else {
-                        modalTicketBtn.style.display = 'none';
-                    }
+                // チケット予約ボタンの表示設定
+                if (modalTicketBtn && liveData.ticketUrl) {
+                    modalTicketBtn.href = liveData.ticketUrl;
+                    modalTicketBtn.textContent = 'チケット予約';
+                    modalTicketBtn.style.display = 'inline-block';
                 }
+
+                // ラジオと同日の場合はラジオボタンも表示！
+                if (hasRadio && modalRadioBtn) {
+                    modalRadioBtn.classList.remove('hidden');
+                }
+
             } else if (hasRadio) {
                 if (modalTitle) modalTitle.textContent = '78 musi-curate フーテンラジオ';
                 htmlContent += `
@@ -442,15 +455,13 @@
                     <p><strong>放送時間：</strong> 27:00 〜 配信開始</p>
                     <p class="font-normal mt-2 leading-relaxed">毎月第一水曜日の定期ラジオ放送日です。</p>
                 `;
-                if (modalTicketBtn) {
-                    modalTicketBtn.href = 'https://program.bayfm.co.jp/curate/';
-                    modalTicketBtn.textContent = 'ラジオを聴く / 詳細';
-                    modalTicketBtn.style.display = 'inline-block';
+                // ラジオ単体の日はラジオボタンを表示
+                if (modalRadioBtn) {
+                    modalRadioBtn.classList.remove('hidden');
                 }
             } else {
                 if (modalTitle) modalTitle.textContent = '公演情報はありません';
                 htmlContent = '<p class="font-normal text-[#12100e]/80">本日の予定公演・出演はありません。</p>';
-                if (modalTicketBtn) modalTicketBtn.style.display = 'none';
             }
 
             // もしライブとラジオが同日の場合
@@ -467,46 +478,46 @@
             if (modalEl) modalEl.classList.remove('hidden');
         }
 
-        // モーダル非表示
-        function closeModal() {
-            if (modalEl) modalEl.classList.add('hidden');
-        }
+            // モーダル非表示
+            function closeModal() {
+                if (modalEl) modalEl.classList.add('hidden');
+            }
 
-        // 月切り替えイベント
-        if (prevMonthBtn) {
-            prevMonthBtn.addEventListener('click', () => {
-                displayMonth--;
-                if (displayMonth < 0) {
-                    displayMonth = 11;
-                    displayYear--;
-                }
-                renderCalendar(displayYear, displayMonth);
-            });
-        }
+            // 月切り替えイベント
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', () => {
+                    displayMonth--;
+                    if (displayMonth < 0) {
+                        displayMonth = 11;
+                        displayYear--;
+                    }
+                    renderCalendar(displayYear, displayMonth);
+                });
+            }
 
-        if (nextMonthBtn) {
-            nextMonthBtn.addEventListener('click', () => {
-                displayMonth++;
-                if (displayMonth > 11) {
-                    displayMonth = 0;
-                    displayYear++;
-                }
-                renderCalendar(displayYear, displayMonth);
-            });
-        }
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', () => {
+                    displayMonth++;
+                    if (displayMonth > 11) {
+                        displayMonth = 0;
+                        displayYear++;
+                    }
+                    renderCalendar(displayYear, displayMonth);
+                });
+            }
 
-        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
 
-        if (modalEl) {
-            modalEl.addEventListener('click', (e) => {
-                if (e.target === modalEl) closeModal();
-            });
-        }
+            if (modalEl) {
+                modalEl.addEventListener('click', (e) => {
+                    if (e.target === modalEl) closeModal();
+                });
+            }
 
-        // 初期表示
-        renderCalendar(displayYear, displayMonth);
-    </script>
+            // 初期表示
+            renderCalendar(displayYear, displayMonth);
+        </script>
 </body>
 
 </html>
