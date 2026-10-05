@@ -17,25 +17,15 @@
             font-family: 'Shippori Mincho', serif;
         }
 
-        /* ① 全体に重なるザラザラしたノイズ質感（どんより感アップ） */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.16'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
+            display: none;
         }
 
-        /* ② ホーロー看板風のフチ・二重枠（トーンを落とした燻み色） */
         .enamel-sign {
-            background-color: #cbbfae;
+            background-color: #ffffff;
             border: 4px solid #12100e;
             box-shadow:
-                inset 0 0 0 3px #cbbfae,
+                inset 0 0 0 3px #ffffff,
                 inset 0 0 0 7px #1c2d42,
                 8px 8px 0px 0px rgba(18, 16, 14, 0.95);
             position: relative;
@@ -43,7 +33,7 @@
     </style>
 </head>
 
-<body class="bg-[#b3a893] text-[#12100e] min-h-screen flex flex-col justify-between">
+<body class="bg-white text-[#12100e] min-h-screen flex flex-col justify-between">
 
     <!-- ヘッダー -->
     <header class="p-4 sm:p-6 text-center border-b border-[#12100e]">
@@ -61,31 +51,33 @@
             <!-- ヘッダー（月切り替え） -->
             <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-[#12100e]">
                 <button id="prev-month"
-                    class="p-2 border-2 border-[#12100e] bg-[#cbbfae] hover:bg-[#801e20] hover:text-[#e8e0d5] text-[#12100e] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] active:translate-x-0.5 active:translate-y-0.5">
+                    class="p-2 border-2 border-[#12100e] bg-white hover:bg-[#801e20] hover:text-[#e8e0d5] text-[#12100e] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] active:translate-x-0.5 active:translate-y-0.5">
                     ＜ 前月
                 </button>
+
                 <h2 id="currentMonthYear" class="text-xl sm:text-2xl font-black text-[#12100e] tracking-widest"></h2>
+
                 <button id="next-month"
-                    class="p-2 border-2 border-[#12100e] bg-[#cbbfae] hover:bg-[#801e20] hover:text-[#e8e0d5] text-[#12100e] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] active:translate-x-0.5 active:translate-y-0.5">
+                    class="p-2 border-2 border-[#12100e] bg-white hover:bg-[#801e20] hover:text-[#e8e0d5] text-[#12100e] font-bold transition-colors shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] active:translate-x-0.5 active:translate-y-0.5">
                     次月 ＞
                 </button>
-            </div>
+        </div>
 
-            <!-- 曜日ヘッダー -->
-            <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center font-bold border-b-2 border-[#12100e] pb-2">
-                <div class="text-[#801e20]">日</div>
-                <div class="text-[#12100e]">月</div>
-                <div class="text-[#12100e]">火</div>
-                <div class="text-[#12100e]">水</div>
-                <div class="text-[#12100e]">木</div>
-                <div class="text-[#12100e]">金</div>
-                <div class="text-[#1c2d42]">土</div>
-            </div>
+        <!-- 曜日ヘッダー -->
+        <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center font-bold border-b-2 border-[#12100e] pb-2">
+            <div class="text-[#801e20]">日</div>
+            <div class="text-[#12100e]">月</div>
+            <div class="text-[#12100e]">火</div>
+            <div class="text-[#12100e]">水</div>
+            <div class="text-[#12100e]">木</div>
+            <div class="text-[#12100e]">金</div>
+            <div class="text-[#1c2d42]">土</div>
+        </div>
 
-            <!-- カレンダーの日付グリッド -->
-            <div id="calendar-days" class="grid grid-cols-7 gap-1 sm:gap-2">
-                <!-- JavaScriptで動的に描画されます -->
-            </div>
+        <!-- カレンダーの日付グリッド -->
+        <div id="calendar-days" class="grid grid-cols-7 gap-1 sm:gap-2">
+            <!-- JavaScriptで動的に描画されます -->
+        </div>
 
         </div>
     </main>
@@ -325,6 +317,38 @@
                 const d = String(day).padStart(2, '0');
                 return `${year}-${m}-${d}`;
             }
+            // 簡易祝日判定データ（主要な祝日・振替休日）
+            function getHolidayName(year, month, day) {
+                const m = month + 1;
+                const d = day;
+                const dateStr = `${m}/${d}`;
+
+                // 固定祝日
+                const fixedHolidays = {
+                    '1/1': '元日',
+                    '2/11': '建国記念の日', '2/23': '天皇誕生日',
+                    '4/29': '昭和の日', '5/3': '憲法記念日', '5/4': 'みどりの日', '5/5': 'こどもの日',
+                    '8/11': '山の日', '11/3': '文化の日', '11/23': '勤労感謝の日', '12/23': '天皇誕生日'
+                };
+                if (fixedHolidays[dateStr]) return fixedHolidays[dateStr];
+
+                // ハッピーマンデー等（第N月曜日など）の判定
+                const dayOfWeek = new Date(year, month, day).getDay();
+                const nthMonday = Math.ceil(day / 7);
+
+                if (dayOfWeek === 1) { // 月曜日
+                    if (m === 1 && nthMonday === 2) return '成人の日';
+                    if (m === 7 && nthMonday === 3) return '海の日';
+                    if (m === 9 && nthMonday === 3) return '敬老の日';
+                    if (m === 10 && nthMonday === 2) return 'スポーツの日';
+                }
+
+                // 春分の日・秋分の日（概算）
+                if (m === 3 && d === Math.floor(20.8431 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '春分の日';
+                if (m === 9 && d === Math.floor(23.2488 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4))) return '秋分の日';
+
+                return null;
+            }
 
             // 第一水曜日かどうかを判定する関数
             function isFirstWednesday(year, month, day) {
@@ -357,16 +381,36 @@
                     const liveData = liveEvents[dateKey];
                     const hasRadio = isFirstWednesday(year, month, day);
 
-                    const dayCell = document.createElement('div');
-                    dayCell.className = 'h-12 sm:h-24 border-2 border-[#12100e] bg-[#d8cebe] p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
+                    // 祝日・土日の判定
+                    const holidayName = getHolidayName(year, month, day);
+                    const dayOfWeek = new Date(year, month, day).getDay();
+                    const isSunday = (dayOfWeek === 0);
+                    const isSaturday = (dayOfWeek === 6);
+                    const isHoliday = !!holidayName;
 
-                    let innerHTML = `<span class="font-black text-xs sm:text-base text-[#12100e] group-hover:text-[#e8e0d5] leading-none">${day}</span>`;
+                    // 日付数字の色を指定（日曜・祝日は赤、土曜は深紺）
+                    let dayNumberColor = 'text-[#12100e]';
+                    if (isSunday || isHoliday) {
+                        dayNumberColor = 'text-[#801e20]'; // 朱赤
+                    } else if (isSaturday) {
+                        dayNumberColor = 'text-[#1c2d42]'; // 深紺
+                    }
+
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'h-12 sm:h-24 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)]';
+
+                    // 日付数字と祝日名（全文表示）のレイアウト
+                    let innerHTML = `
+                        <div class="flex justify-between items-start leading-none gap-0.5">
+                            <span class="font-black text-xs sm:text-base ${dayNumberColor} group-hover:text-[#e8e0d5] shrink-0">${day}</span>
+                            ${isHoliday ? `<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">${holidayName}</span>` : ''}
+                        </div>
+                    `;
 
                     innerHTML += `<div class="flex flex-col gap-0.5 sm:gap-1 w-full">`;
 
                     // ライブ情報がある場合（赤バッジ：都道府県の頭2文字だけ表示）
                     if (liveData) {
-                        // 「東京・渋谷」などの先頭2文字（都道府県）だけを取得
                         const pref = liveData.location ? liveData.location.substring(0, 2) : '公演';
                         innerHTML += `
                         <div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[9px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">
