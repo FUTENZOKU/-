@@ -5,12 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>フーテン族 公演日程</title>
   <style>
-    /* （HTMLデザインのCSS等はここにそのまま維持されます） */
+    body { font-family: sans-serif; margin: 20px; background: #fff; color: #333; }
+    h1 { font-size: 1.5rem; border-bottom: 2px solid #333; padding-bottom: 8px; }
+    .calendar-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+    .calendar-controls button { padding: 6px 12px; cursor: pointer; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; background: #ddd; border: 1px solid #ddd; }
+    .day-header { background: #f0f0f0; text-align: center; padding: 8px; font-weight: bold; font-size: 0.85rem; }
+    .day-cell { background: #fff; min-height: 80px; padding: 4px; box-sizing: border-box; position: relative; }
+    .day-number { font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; }
+    .event-tag { background: #ff4757; color: #fff; padding: 3px 6px; font-size: 0.75rem; border-radius: 3px; cursor: pointer; display: block; margin-top: 2px; }
+    
+    /* モーダル表示用 */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%; box-sizing: border-box; }
+    .modal-close { margin-top: 15px; text-align: right; }
+    .modal-close button { padding: 5px 15px; cursor: pointer; }
+    .ticket-btn { display: inline-block; margin-top: 10px; padding: 8px 16px; background: #2ed573; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
   </style>
 </head>
 <body>
-  <!-- HPコンテンツ -->
+
+  <h1>公演日程表 - LIVE SCHEDULE</h1>
+
+  <div class="calendar-controls">
+    <button id="prev-month">&lt; 前月</button>
+    <h2 id="current-month-label" style="font-size: 1.2rem; margin: 0;"></h2>
+    <button id="next-month">次月 &gt;</button>
+  </div>
+
+  <div class="calendar-grid" id="calendar-grid"></div>
+
+  <!-- イベント詳細モーダル -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-content">
+      <h3 id="modal-title" style="margin-top:0;"></h3>
+      <p id="modal-info" style="white-space: pre-wrap; font-size: 0.9rem;"></p>
+      <div id="modal-ticket"></div>
+      <div class="modal-close">
+        <button id="modal-close-btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // GASから流し込まれたライブ情報データ
     const liveEvents = {
           "2026-10-06": {
                     "type": "live",
@@ -163,6 +202,95 @@
                     "flyerUrl": ""
           }
 };
+
+    let currentDate = new Date();
+
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      document.getElementById('current-month-label').textContent = `${year}年 ${month + 1}月`;
+
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+      dayNames.forEach(name => {
+        const header = document.createElement('div');
+        header.className = 'day-header';
+        header.textContent = name;
+        grid.appendChild(header);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'day-cell';
+        grid.appendChild(emptyCell);
+      }
+
+      for (let date = 1; date <= lastDate; date++) {
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+
+        const num = document.createElement('div');
+        num.className = 'day-number';
+        num.textContent = date;
+        cell.appendChild(num);
+
+        const monthStr = String(month + 1).padStart(2, '0');
+        const dateStr = String(date).padStart(2, '0');
+        const key = `${year}-${monthStr}-${dateStr}`;
+
+        if (liveEvents[key]) {
+          const ev = liveEvents[key];
+          const tag = document.createElement('div');
+          tag.className = 'event-tag';
+          tag.textContent = ev.title;
+          tag.onclick = () => showModal(ev);
+          cell.appendChild(tag);
+        }
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function showModal(ev) {
+      document.getElementById('modal-title').textContent = ev.title;
+      let infoText = `会場: ${ev.venue}\n時間: ${ev.time}\n料金: ${ev.price}`;
+      document.getElementById('modal-info').textContent = infoText;
+
+      const ticketDiv = document.getElementById('modal-ticket');
+      ticketDiv.innerHTML = '';
+      if (ev.ticketUrl) {
+        const btn = document.createElement('a');
+        btn.className = 'ticket-btn';
+        btn.href = ev.ticketUrl;
+        btn.target = '_blank';
+        btn.textContent = 'チケット予約';
+        ticketDiv.appendChild(btn);
+      }
+
+      document.getElementById('modal-overlay').classList.add('active');
+    }
+
+    document.getElementById('modal-close-btn').onclick = () => {
+      document.getElementById('modal-overlay').classList.remove('active');
+    };
+
+    document.getElementById('prev-month').onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    };
+
+    document.getElementById('next-month').onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    };
+
+    renderCalendar();
   </script>
 </body>
 </html>
