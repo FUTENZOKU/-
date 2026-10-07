@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>フーテン族 公演日程</title>
+    <title>公演日程表 - LIVE SCHEDULE</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Shippori Mincho -->
@@ -69,7 +69,6 @@
 
             <!-- カレンダーの日付グリッド -->
             <div id="calendar-days" class="grid grid-cols-7 gap-1 sm:gap-2">
-                <!-- JavaScriptで動的に描画されます -->
             </div>
 
         </div>
@@ -129,7 +128,6 @@
 
     <!-- JavaScript 処理 -->
     <script>
-        // スプレッドシートから動的に渡される公演データ
         const liveEvents = {
           "2026-10-06": {
                     "type": "live",
@@ -373,11 +371,11 @@
             if (modalTitle && modalContent && modalTicketBtn) {
                 if (liveData) {
                     modalTitle.textContent = liveData.title || "公演詳細";
-                    let contentHTML = "<p><span class=\"text-[#801e20]\">【会場】</span> " + (liveData.venue || "未定") + " (" + (liveData.location || "") + ")</p>" +
-                        "<p><span class=\"text-[#801e20]\">【時間】</span> " + (liveData.time || "未定") + "</p>" +
-                        "<p><span class=\"text-[#801e20]\">【料金】</span> " + (liveData.price || "未定") + "</p>";
+                    let contentHTML = '<p><span class="text-[#801e20]">【会場】</span> ' + (liveData.venue || "未定") + " (" + (liveData.location || "") + ")</p>" +
+                        '<p><span class="text-[#801e20]">【時間】</span> ' + (liveData.time || "未定") + "</p>" +
+                        '<p><span class="text-[#801e20]">【料金】</span> ' + (liveData.price || "未定") + "</p>";
                     if (hasRadio) {
-                        contentHTML += "<p class=\"mt-2 pt-2 border-t border-[#12100e]/30\"><span class=\"text-[#1c2d42]\">【ラジオ】</span> bayfm『CURATE radio』放送日 (27:00〜)</p>";
+                        contentHTML += '<p class="mt-2 pt-2 border-t border-[#12100e]/30"><span class="text-[#1c2d42]">【ラジオ】</span> bayfm『CURATE radio』放送日 (27:00〜)</p>';
                     }
                     modalContent.innerHTML = contentHTML;
                     if (liveData.ticketUrl) {
@@ -388,7 +386,7 @@
                     }
                 } else if (hasRadio) {
                     modalTitle.textContent = "ラジオ出演";
-                    modalContent.innerHTML = "<p><span class=\"text-[#1c2d42]\">【番組名】</span> bayfm『CURATE radio』</p><p><span class=\"text-[#1c2d42]\">【時間】</span> 毎週第一水曜日 27:00〜（木曜午前3時）</p>";
+                    modalContent.innerHTML = '<p><span class="text-[#1c2d42]">【番組名】</span> bayfm『CURATE radio』</p><p><span class="text-[#1c2d42]">【時間】</span> 毎週第一水曜日 27:00〜（木曜午前3時）</p>';
                     modalTicketBtn.classList.add("hidden");
                 } else {
                     modalTitle.textContent = "予定情報";
