@@ -29,18 +29,18 @@
         }
     </style>
 </head>
-<body class="bg-white text-[#12100e] min-h-screen flex flex-col justify-between p-2 md:p-3 overflow-y-auto">
+<body class="bg-white text-[#12100e] p-2 md:p-3">
 
     <!-- ヘッダー -->
-    <header class="py-1 text-center border-b border-[#12100e]">
+    <header class="py-1 text-center border-b border-[#12100e] mb-2">
         <h1 class="text-lg sm:text-2xl md:text-2xl font-black text-center text-[#12100e] tracking-widest">
             フーテン族公演日程
         </h1>
     </header>
 
-    <!-- メインコンテンツ -->
-    <main class="flex-1 flex justify-center p-1 md:py-2">
-        <div class="enamel-sign w-full max-w-4xl md:max-w-3xl mx-auto p-2 md:p-3">
+    <!-- メインコンテンツ (flex-1を完全に削除して縦伸びを防止) -->
+    <main class="w-full flex justify-center p-1 md:py-2">
+        <div class="enamel-sign w-full max-w-4xl md:max-w-3xl mx-auto p-2 sm:p-4">
 
             <div class="flex items-center justify-between mb-2 pb-2 border-b-2 border-[#12100e]">
                 <button id="prev-month"
@@ -73,7 +73,7 @@
     </main>
 
     <!-- フッター -->
-    <footer class="py-2 text-center text-xs text-[#12100e]/80 border-t border-[#12100e]/30">
+    <footer class="mt-4 py-2 text-center text-xs text-[#12100e]/80 border-t border-[#12100e]/30">
         &copy; フーテン族
     </footer>
 
@@ -125,196 +125,7 @@
 
     <!-- JavaScript 処理 -->
     <script>
-        const liveEvents = {
-          "2026-10-06": {
-                    "type": "live",
-                    "title": "渋谷うたの日",
-                    "location": "東京・渋谷",
-                    "venue": "Spotify O-WEST",
-                    "performers": "The Tiger / 暴動クラブ / フーテン族",
-                    "time": "18:15 開場 / 19:00 開演",
-                    "price": "前売 ¥4,500 (+1D)",
-                    "ticketUrl": "https://t.pia.jp/pia/event/event.do?eventCd=2619971",
-                    "flyerUrl": [
-                              "images/261006.jpeg"
-                    ]
-          },
-          "2026-10-12": {
-                    "type": "live",
-                    "title": "The Strange Boutique",
-                    "location": "東京・渋谷",
-                    "venue": "CLUB CRAWL",
-                    "performers": "小里誠 a.k.a. Francis / から探し / フーテン族",
-                    "time": "18:30 開場 / 19:00 開演",
-                    "price": "前売 ¥3,000 / 当日 ¥3,500　(各+1D)",
-                    "ticketUrl": "https://tiget.net/events/526970",
-                    "flyerUrl": [
-                              "images/261012.jpeg"
-                    ]
-          },
-          "2026-10-18": {
-                    "type": "live",
-                    "title": "2026年フーテン族の音楽会 第三夜",
-                    "location": "東京・渋谷",
-                    "venue": "渋谷 B.Y.G",
-                    "performers": "フーテン族",
-                    "time": "18:00 開場 / 19:00 開演",
-                    "price": "一般 ¥3,500 / 学生 ¥2,000　(各+1D)",
-                    "ticketUrl": "https://forms.gle/UorRvG3YGfD9yJZC9",
-                    "flyerUrl": [
-                              "images/261018.jpeg"
-                    ]
-          },
-          "2026-10-23": {
-                    "type": "live",
-                    "title": "TSURUMAI EMPATHY",
-                    "location": "愛知・名古屋",
-                    "venue": "鶴舞 DAYTRIP",
-                    "performers": "砂場泥棒 / 木魚人 / フーテン族",
-                    "time": "18:30 開場 / 19:00 開演",
-                    "price": "前売 ¥3,000 / 当日 ¥3,500　(各+1D)",
-                    "ticketUrl": "https://forms.gle/JsnesYAuDoKrnuhZA",
-                    "flyerUrl": [
-                              "images/261023.jpeg"
-                    ]
-          },
-          "2026-10-24": {
-                    "type": "live",
-                    "title": "YAPOOL “東京スクラップ・アンド・ビルド” Release Tour 2026",
-                    "location": "群馬・高崎",
-                    "venue": "the Groove TAKASAKI",
-                    "performers": "YAPOOL / 暴動クラブ / サテライト / フーテン族",
-                    "time": "16:30 開場 / 17:00 開演",
-                    "price": "前売 ¥3,500 / 当日 ¥4,000　(各+1D)",
-                    "ticketUrl": "https://forms.gle/64V666Ub8yUV2sSx7",
-                    "flyerUrl": [
-                              "images/261024.jpeg"
-                    ]
-          },
-          "2026-10-25": {
-                    "type": "live",
-                    "title": "武蔵野えれじい",
-                    "location": "東京・吉祥寺",
-                    "venue": "全4会場 出演会場未定",
-                    "performers": "多数",
-                    "time": "12:00 開場 / 13:00 開演",
-                    "price": "一般 ¥4,800 / 学生 ¥4,000　(各+1D)",
-                    "ticketUrl": "https://newfolkjp.stores.jp/items/6a7460b7d8e56a12b8c034e5",
-                    "flyerUrl": [
-                              "images/261025A.png",
-                              "images/261025B.png"
-                    ]
-          },
-          "2026-10-31": {
-                    "type": "live",
-                    "title": "Win-Win HalloWeen",
-                    "location": "長野・岡谷",
-                    "venue": "岡谷 Music Bar UzuUzu",
-                    "performers": "あなたと私 / FLASH Back GARAGE / Mr. Fin and Jake / フーテン族",
-                    "time": "17:30 開場 / 18:00 開演",
-                    "price": "前売 ¥2,500 / 当日 未定　(各+1D)",
-                    "ticketUrl": "https://forms.gle/xL7JDWWUBzuTNmCDA",
-                    "flyerUrl": [
-                              "images/261031.jpeg"
-                    ]
-          },
-          "2026-11-03": {
-                    "type": "live",
-                    "title": "琴線に触れる vol.32",
-                    "location": "兵庫・神戸",
-                    "venue": "神戸 Varit.",
-                    "performers": "赤気 / ドカドカ / くっつくパピー / 蟹光船 / フーテン族 / (O.A.) エラーガール",
-                    "time": "17:00 開場 / 17:30 開演",
-                    "price": "前売 ¥3,000 / 当日 ¥3,500　(各+1D)",
-                    "ticketUrl": "https://forms.gle/gKG4PiBcXdNxNgif7",
-                    "flyerUrl": [
-                              "images/261103.png"
-                    ]
-          },
-          "2026-11-04": {
-                    "type": "live",
-                    "title": "フーテン族  ワンマンコンサート",
-                    "location": "京都・上京区",
-                    "venue": "COFFEE HOUSE 拾得",
-                    "performers": "フーテン族",
-                    "time": "17:30 開場 / 19:00 開演",
-                    "price": "前売 ¥3,500 / 当日 ¥4,500 / 学生 ¥2,000　(各+1D)",
-                    "ticketUrl": "https://forms.gle/xT9TV6VpPCuoJKm87",
-                    "flyerUrl": [
-                              "images/261104.jpeg"
-                    ]
-          },
-          "2026-11-24": {
-                    "type": "live",
-                    "title": "止まらない何か Vol.20",
-                    "location": "東京・新宿",
-                    "venue": "新宿 red cloth",
-                    "performers": "THE PERRY / ドンマツオと新世界 / Akabane Vulgars on Strong Bypass / フーテン族",
-                    "time": "18:15 開場 / 18:45 開演",
-                    "price": "前売 ¥3,500 / 当日 ¥4,000　(各+1D)",
-                    "ticketUrl": "https://forms.gle/qYUyZsUQ7avCzrpa9",
-                    "flyerUrl": [
-                              "images/261124.jpeg"
-                    ]
-          },
-          "2026-11-29": {
-                    "type": "live",
-                    "title": "公演あり (詳細後日解禁)",
-                    "location": "東京・某所",
-                    "venue": "",
-                    "performers": "",
-                    "time": "後日解禁",
-                    "price": "後日解禁",
-                    "ticketUrl": "",
-                    "flyerUrl": []
-          },
-          "2026-12-20": {
-                    "type": "live",
-                    "title": "公演あり (詳細後日解禁)",
-                    "location": "大阪・某所",
-                    "venue": "",
-                    "performers": "",
-                    "time": "後日解禁",
-                    "price": "後日解禁",
-                    "ticketUrl": "",
-                    "flyerUrl": []
-          },
-          "2026-12-21": {
-                    "type": "live",
-                    "title": "公演あり (詳細後日解禁)",
-                    "location": "愛知・某所",
-                    "venue": "",
-                    "performers": "",
-                    "time": "後日解禁",
-                    "price": "後日解禁",
-                    "ticketUrl": "",
-                    "flyerUrl": []
-          },
-          "2027-01-10": {
-                    "type": "live",
-                    "title": "ロックンロールサーカス2027",
-                    "location": "兵庫・神戸",
-                    "venue": "全7会場 出演会場未定",
-                    "performers": "多数",
-                    "time": "12:00 開場 / 13:00 開演",
-                    "price": "二日券 ¥14,700 / U-25 ¥8,200 一日券 ¥7,900 / U-25 ¥4,600　(各+1D)",
-                    "ticketUrl": "https://rrckobe.com/#tickets",
-                    "flyerUrl": [
-                              "images/270110.jpeg"
-                    ]
-          },
-          "2027-01-11": {
-                    "type": "live",
-                    "title": "ロックンロールをはじめよう",
-                    "location": "東京・鶯谷",
-                    "venue": "新世紀ダンスホール",
-                    "performers": "自爆 / ゆうやけしはす / 暴動クラブ / YAPOOL / フーテン族",
-                    "time": "16:30 開場 / 17:30 開演",
-                    "price": "一般 ¥4,400 / U-22 ¥2,200　(各+1D)",
-                    "ticketUrl": "https://eplus.jp/sf/detail/4606850001-P0030001?P6=001&P1=0402&P59=1",
-                    "flyerUrl": []
-          }
-};
+        const liveEvents = ${liveEventsJson};
 
         const calendarDaysEl = document.getElementById("calendar-days");
         const currentMonthYearEl = document.getElementById("currentMonthYear");
@@ -457,7 +268,7 @@
             for (let i = firstDay - 1; i >= 0; i--) {
                 const prevDay = prevMonthLastDay - i;
                 const emptyCell = document.createElement("div");
-                emptyCell.className = "h-12 md:h-12 border border-[#12100e]/15 bg-gray-50/50 p-0.5 text-black/30 font-bold text-xs select-none";
+                emptyCell.className = "h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none";
                 emptyCell.textContent = prevDay;
                 calendarDaysEl.appendChild(emptyCell);
             }
@@ -480,22 +291,22 @@
                 }
 
                 const dayCell = document.createElement("div");
-                dayCell.className = "h-12 md:h-12 border-2 border-[#12100e] bg-white p-0.5 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] select-none";
+                dayCell.className = "h-12 sm:h-20 border-2 border-[#12100e] bg-white p-0.5 sm:p-1 flex flex-col justify-between cursor-pointer hover:bg-[#12100e] hover:text-[#e8e0d5] transition-colors group relative shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] select-none";
 
                 let innerHTML = '<div class="flex justify-between items-start leading-none gap-0.5 pointer-events-none">';
-                innerHTML += '<span class="font-black text-xs ' + dayNumberColor + ' group-hover:text-[#e8e0d5] shrink-0">' + day + '</span>';
+                innerHTML += '<span class="font-black text-xs sm:text-base ' + dayNumberColor + ' group-hover:text-[#e8e0d5] shrink-0">' + day + '</span>';
                 if (isHoliday) {
-                    innerHTML += '<span class="text-[7px] sm:text-[9px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">' + holidayName + '</span>';
+                    innerHTML += '<span class="text-[7px] sm:text-[10px] text-[#801e20] group-hover:text-[#e8e0d5] font-bold text-right leading-tight break-all">' + holidayName + '</span>';
                 }
                 innerHTML += '</div>';
                 innerHTML += '<div class="flex flex-col gap-0.5 w-full mt-auto pointer-events-none">';
 
                 if (liveData) {
                     const pref = liveData.location ? liveData.location.substring(0, 2) : "公演";
-                    innerHTML += '<div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-[10px] font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">' + pref + '</div>';
+                    innerHTML += '<div class="bg-[#801e20] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#801e20] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0.5 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">' + pref + '</div>';
                 }
                 if (hasRadio) {
-                    innerHTML += '<div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-[10px] font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">ラジオ</div>';
+                    innerHTML += '<div class="bg-[#1c2d42] group-hover:bg-[#e8e0d5] text-[#e8e0d5] group-hover:text-[#1c2d42] border border-[#12100e] text-[8px] sm:text-xs font-bold px-0 py-0.5 text-center leading-none tracking-tighter whitespace-nowrap overflow-hidden">ラジオ</div>';
                 }
                 innerHTML += '</div>';
                 dayCell.innerHTML = innerHTML;
@@ -509,7 +320,7 @@
             const remainingCells = totalGridCells - (firstDay + totalDays);
             for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
                 const emptyCell = document.createElement("div");
-                emptyCell.className = "h-12 md:h-12 border border-[#12100e]/15 bg-gray-50/50 p-0.5 text-black/30 font-bold text-xs select-none";
+                emptyCell.className = "h-12 sm:h-20 border border-[#12100e]/15 bg-gray-50/50 p-0.5 sm:p-1 text-black/30 font-bold text-xs sm:text-base select-none";
                 emptyCell.textContent = nextDay;
                 calendarDaysEl.appendChild(emptyCell);
             }
