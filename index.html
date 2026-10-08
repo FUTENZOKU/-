@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="フーテン族 公演日程表">
-    <meta property="og:description" content="フーテン族のライブ・公演スケジュール一覧です。">
-    <meta property="og:site_name" content="フーテン族">
-    
-    <title>フーテン族 公演日程表 - LIVE SCHEDULE</title>
+    <title>公演日程表 - LIVE SCHEDULE</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Shippori Mincho -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;900&display=swap" rel="stylesheet">
@@ -32,12 +29,14 @@
 </head>
 <body class="bg-white text-[#12100e] h-[100dvh] flex flex-col justify-between p-2 sm:p-4 overflow-hidden">
 
+    <!-- ヘッダー -->
     <header class="py-1 text-center border-b border-[#12100e]">
         <h1 class="text-lg sm:text-2xl md:text-3xl font-black text-center text-[#12100e] tracking-widest">
             フーテン族公演日程
         </h1>
     </header>
 
+    <!-- メインコンテンツ -->
     <main class="flex-1 flex items-center justify-center p-1 sm:p-4 min-h-0">
         <div class="enamel-sign w-full max-w-4xl mx-auto p-2 sm:p-6">
 
@@ -71,10 +70,12 @@
         </div>
     </main>
 
+    <!-- フッター -->
     <footer class="py-4 text-center text-xs text-[#12100e]/80 border-t border-[#12100e]/30">
         &copy; フーテン族
     </footer>
 
+    <!-- イベント詳細モーダル -->
     <div id="event-modal"
         class="fixed inset-0 bg-[#12100e]/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
         <div id="modal-card"
@@ -107,7 +108,7 @@
                         class="bg-[#801e20] text-[#e8e0d5] hover:bg-[#12100e] font-black px-3 py-2 text-xs sm:text-sm border-2 border-[#12100e] shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] transition-colors">
                         チケット予約
                     </a>
-                    <a id="modalRadioBtn" href="https://radiko.jp/r_seasons/10013883" target="_blank"
+                    <a id="modalRadioBtn" href="https://program.bayfm.co.jp/curate/" target="_blank"
                         class="hidden bg-[#1c2d42] text-[#e8e0d5] hover:bg-[#12100e] font-black px-3 py-2 text-xs sm:text-sm border-2 border-[#12100e] shadow-[2px_2px_0px_0px_rgba(18,16,14,1)] transition-colors">
                         ラジオを聴く
                     </a>
@@ -120,6 +121,7 @@
         </div>
     </div>
 
+    <!-- JavaScript 処理 -->
     <script>
         const liveEvents = {
           "2026-10-06": {
@@ -256,8 +258,8 @@
           "2026-11-29": {
                     "type": "live",
                     "title": "LIVE (詳細後日発表)",
-                    "location": "東京",
-                    "venue": "東京・某所",
+                    "location": "東京・下北沢",
+                    "venue": "下北沢SHELTER",
                     "performers": "",
                     "time": "後日発表",
                     "price": "後日発表",
@@ -267,8 +269,8 @@
           "2026-12-20": {
                     "type": "live",
                     "title": "LIVE (詳細後日発表)",
-                    "location": "大阪",
-                    "venue": "大阪・某所",
+                    "location": "大阪・某所",
+                    "venue": "Live Bar FANDANGO",
                     "performers": "",
                     "time": "後日発表",
                     "price": "後日発表",
@@ -278,8 +280,8 @@
           "2026-12-21": {
                     "type": "live",
                     "title": "LIVE (詳細後日発表)",
-                    "location": "愛知",
-                    "venue": "愛知・某所",
+                    "location": "愛知・某所",
+                    "venue": "金山ブラジルコーヒー",
                     "performers": "",
                     "time": "後日発表",
                     "price": "後日発表",
@@ -402,20 +404,14 @@
             if (modalTitle && modalContent && modalTicketBtn) {
                 if (liveData) {
                     modalTitle.textContent = liveData.title || "公演詳細";
-                    
-                    let venueText = liveData.venue || "未定";
-                    if (liveData.location && !venueText.includes(liveData.location)) {
-                        venueText += " (" + liveData.location + ")";
-                    }
-                    
-                    let contentHTML = '<p><span class="text-[#801e20]">【会場】</span> ' + venueText + "</p>";
+                    let contentHTML = '<p><span class="text-[#801e20]">【会場】</span> ' + (liveData.venue || "未定") + " (" + (liveData.location || "") + ")</p>";
                     if (liveData.performers) {
                         contentHTML += '<p><span class="text-[#801e20]">【出演】</span> ' + liveData.performers + "</p>";
                     }
                     contentHTML += '<p><span class="text-[#801e20]">【時間】</span> ' + (liveData.time || "未定") + "</p>" +
                         '<p><span class="text-[#801e20]">【料金】</span> ' + (liveData.price || "未定") + "</p>";
                     if (hasRadio) {
-                        contentHTML += '<p class="mt-2 pt-2 border-t border-[#12100e]/30"><span class="text-[#1c2d42]">【ラジオ】</span> bayfm『78 musi-curate』放送日 (27:00〜)</p>';
+                        contentHTML += '<p class="mt-2 pt-2 border-t border-[#12100e]/30"><span class="text-[#1c2d42]">【ラジオ】</span> bayfm『CURATE radio』放送日 (27:00〜)</p>';
                     }
                     modalContent.innerHTML = contentHTML;
                     if (liveData.ticketUrl) {
@@ -425,8 +421,8 @@
                         modalTicketBtn.classList.add("hidden");
                     }
                 } else if (hasRadio) {
-                    modalTitle.textContent = "ラジオ放送";
-                    modalContent.innerHTML = '<p><span class="text-[#1c2d42]">【番組名】</span> bayfm『78 musi-curate』</p><p><span class="text-[#1c2d42]">【時間】</span> 毎週第一水曜日 27:00〜（木曜午前3時）</p>';
+                    modalTitle.textContent = "ラジオ出演";
+                    modalContent.innerHTML = '<p><span class="text-[#1c2d42]">【番組名】</span> bayfm『CURATE radio』</p><p><span class="text-[#1c2d42]">【時間】</span> 毎週第一水曜日 27:00〜（木曜午前3時）</p>';
                     modalTicketBtn.classList.add("hidden");
                 } else {
                     modalTitle.textContent = "予定情報";
